@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Settings, Key, GitBranch, Server, Plus, Trash2, Eye, EyeOff, ToggleLeft, ToggleRight, Sun, Moon } from "lucide-react";
+import { Settings, Key, GitBranch, Server, Plus, Trash2, Eye, EyeOff, ToggleLeft, ToggleRight, Sun, Moon, Download, RefreshCw, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { useUpdater } from "@/hooks/useUpdater";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useTheme } from "@/hooks/useTheme";
@@ -76,9 +77,42 @@ export function SettingsPage() {
 function GeneralTab() {
   const { theme, set } = useTheme();
   const s = useStyles();
+  const updater = useUpdater();
 
   return (
     <div className="space-y-5">
+      <Section title="Updates">
+        <div className={`flex items-center justify-between rounded-md border px-3 py-2.5 mb-1 ${s.row}`}>
+          <div className="flex items-center gap-2">
+            {updater.status === "checking" && <Loader2 size={14} className="animate-spin text-emerald-500" />}
+            {updater.status === "upToDate" && <CheckCircle size={14} className="text-emerald-500" />}
+            {updater.status === "available" && <Download size={14} className="text-amber-500" />}
+            {updater.status === "downloading" && <Loader2 size={14} className="animate-spin text-emerald-500" />}
+            {updater.status === "installing" && <Loader2 size={14} className="animate-spin text-emerald-500" />}
+            {updater.status === "error" && <AlertCircle size={14} className="text-red-500" />}
+            {updater.status === "idle" && <RefreshCw size={14} className={s.label} />}
+            <span className={`text-[13px] ${s.label}`}>
+              {updater.status === "idle" && "Version 0.1.0"}
+              {updater.status === "checking" && "Checking for updates..."}
+              {updater.status === "upToDate" && "Up to date (v0.1.0)"}
+              {updater.status === "available" && `Update available: v${updater.version}`}
+              {updater.status === "downloading" && `Downloading... ${updater.progress ?? 0}%`}
+              {updater.status === "installing" && "Installing update..."}
+              {updater.status === "error" && `Error: ${updater.error}`}
+            </span>
+          </div>
+          {(updater.status === "idle" || updater.status === "upToDate" || updater.status === "error") && (
+            <button onClick={updater.checkForUpdate} className={`text-[12px] font-medium px-3 py-1.5 rounded-md transition-colors ${s.accentBtnOutline} border`}>
+              Check
+            </button>
+          )}
+          {updater.status === "available" && (
+            <button onClick={updater.downloadAndInstall} className={`text-[12px] font-medium px-3 py-1.5 rounded-md transition-colors ${s.accentBtn}`}>
+              Update Now
+            </button>
+          )}
+        </div>
+      </Section>
       <Section title="Appearance">
         <div className={`flex items-center justify-between rounded-md border px-3 py-2.5 mb-1 ${s.row}`}>
           <span className={`text-[13px] ${s.label}`}>Theme</span>
