@@ -33,9 +33,6 @@ jobs:
           - platform: macos-latest
             target: aarch64-apple-darwin
             label: macOS (Apple Silicon)
-          - platform: macos-latest
-            target: x86_64-apple-darwin
-            label: macOS (Intel)
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
             label: Windows (x86_64)
@@ -78,6 +75,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_SIGNING_IDENTITY: "Developer ID Application: Semih Silistre (WGWRFNDZXL)"
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
