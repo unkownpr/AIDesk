@@ -13,27 +13,27 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg-primary: #0a0612;
-      --bg-secondary: #110d1f;
-      --bg-card: #161029;
-      --bg-card-hover: #1c1435;
-      --border-color: rgba(139, 92, 246, 0.15);
-      --border-color-hover: rgba(139, 92, 246, 0.35);
-      --text-primary: #f1f0f5;
-      --text-secondary: #a09bb5;
-      --text-muted: #6b6580;
-      --accent-purple: #8b5cf6;
-      --accent-blue: #3b82f6;
+      --bg-primary: #09090b;
+      --bg-secondary: #0f0f12;
+      --bg-card: #18181b;
+      --bg-card-hover: #1f1f23;
+      --border-color: rgba(16, 185, 129, 0.15);
+      --border-color-hover: rgba(16, 185, 129, 0.35);
+      --text-primary: #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --text-muted: #52525b;
+      --accent-primary: #10b981;
+      --accent-light: #34d399;
+      --accent-dark: #059669;
       --accent-cyan: #06b6d4;
-      --accent-pink: #ec4899;
-      --accent-green: #10b981;
-      --accent-orange: #f59e0b;
-      --gradient-main: linear-gradient(135deg, #8b5cf6, #3b82f6);
-      --gradient-hero: linear-gradient(135deg, #8b5cf6 0%, #6366f1 25%, #3b82f6 50%, #06b6d4 100%);
-      --gradient-card: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(59, 130, 246, 0.05));
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --gradient-main: linear-gradient(135deg, #10b981, #06b6d4);
+      --gradient-hero: linear-gradient(135deg, #059669 0%, #10b981 30%, #34d399 60%, #06b6d4 100%);
+      --gradient-card: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(6, 182, 212, 0.03));
       --radius: 12px;
       --radius-lg: 20px;
-      --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.15);
+      --shadow-glow: 0 0 60px rgba(16, 185, 129, 0.12);
     }
 
     html { scroll-behavior: smooth; }
@@ -50,8 +50,8 @@
     /* Scrollbar */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--bg-primary); }
-    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+    ::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.5); }
 
     /* ---- Animations ---- */
     @keyframes fadeInUp {
@@ -67,8 +67,8 @@
       50% { transform: translateY(-10px); }
     }
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
-      50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.4); }
+      0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+      50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.4); }
     }
     @keyframes gradient-shift {
       0% { background-position: 0% 50%; }
@@ -198,7 +198,7 @@
       font-family: 'Inter', sans-serif;
     }
     .lang-toggle button.active {
-      background: var(--accent-purple);
+      background: var(--accent-primary);
       color: white;
     }
     .mobile-menu-btn {
@@ -235,7 +235,7 @@
       transform: translateX(-50%);
       width: 800px;
       height: 800px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%);
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.08) 40%, transparent 70%);
       animation: pulse-glow 4s ease-in-out infinite;
     }
     .hero-bg::after {
@@ -251,8 +251,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
       background-size: 60px 60px;
       mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
       -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
@@ -268,19 +268,19 @@
       align-items: center;
       gap: 8px;
       padding: 6px 16px;
-      background: rgba(139, 92, 246, 0.1);
-      border: 1px solid rgba(139, 92, 246, 0.25);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
       border-radius: 50px;
       font-size: 0.85rem;
       font-weight: 500;
-      color: var(--accent-purple);
+      color: var(--accent-primary);
       margin-bottom: 28px;
     }
     .hero-badge .dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--accent-green);
+      background: var(--accent-primary);
       animation: pulse-glow 2s infinite;
     }
     .hero h1 {
@@ -328,11 +328,11 @@
     .btn-primary {
       background: var(--gradient-main);
       color: white;
-      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.45);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.45);
     }
     .btn-secondary {
       background: var(--bg-card);
@@ -358,7 +358,7 @@
       width: calc(100% + 4px);
       margin: 0 auto;
       border-radius: calc(var(--radius-lg) + 2px);
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue), var(--accent-cyan));
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan), var(--accent-cyan));
       opacity: 0.5;
       z-index: 0;
       filter: blur(1px);
@@ -371,7 +371,7 @@
       width: calc(100% + 80px);
       margin: 0 auto;
       border-radius: 40px;
-      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15), transparent 70%);
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.15), transparent 70%);
       z-index: -1;
       pointer-events: none;
     }
@@ -379,10 +379,10 @@
       max-width: 800px;
       width: 100%;
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.3);
       box-shadow:
-        0 0 80px rgba(139, 92, 246, 0.2),
-        0 0 40px rgba(59, 130, 246, 0.1),
+        0 0 80px rgba(16, 185, 129, 0.2),
+        0 0 40px rgba(6, 182, 212, 0.1),
         0 20px 60px rgba(0, 0, 0, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
       position: relative;
@@ -392,8 +392,8 @@
     .hero-screenshot:hover img {
       transform: translateY(-4px) scale(1.005);
       box-shadow:
-        0 0 100px rgba(139, 92, 246, 0.3),
-        0 0 60px rgba(59, 130, 246, 0.15),
+        0 0 100px rgba(16, 185, 129, 0.3),
+        0 0 60px rgba(6, 182, 212, 0.15),
         0 24px 70px rgba(0, 0, 0, 0.6),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
@@ -437,7 +437,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 3px;
-      color: var(--accent-purple);
+      color: var(--accent-primary);
       margin-bottom: 16px;
     }
     .section-title {
@@ -498,12 +498,12 @@
       margin-bottom: 20px;
       font-size: 1.4rem;
     }
-    .feature-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
-    .feature-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+    .feature-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--accent-primary); }
     .feature-icon.cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
-    .feature-icon.pink { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
-    .feature-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
-    .feature-icon.orange { background: rgba(245, 158, 11, 0.15); color: var(--accent-orange); }
+    .feature-icon.teal { background: rgba(20, 184, 166, 0.15); color: #14b8a6; }
+    .feature-icon.amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+    .feature-icon.emerald { background: rgba(52, 211, 153, 0.15); color: var(--accent-light); }
+    .feature-icon.zinc { background: rgba(161, 161, 170, 0.15); color: var(--text-secondary); }
     .feature-icon svg { width: 24px; height: 24px; }
     .feature-card h3 {
       font-size: 1.1rem;
@@ -533,7 +533,7 @@
       left: 15%;
       right: 15%;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), var(--accent-cyan));
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan), var(--accent-cyan));
       opacity: 0.3;
     }
     .step {
@@ -554,19 +554,19 @@
       z-index: 1;
     }
     .step:nth-child(1) .step-number {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
-      border: 2px solid rgba(139, 92, 246, 0.4);
-      color: var(--accent-purple);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      color: var(--accent-primary);
     }
     .step:nth-child(2) .step-number {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
-      border: 2px solid rgba(59, 130, 246, 0.4);
-      color: var(--accent-blue);
-    }
-    .step:nth-child(3) .step-number {
       background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
       border: 2px solid rgba(6, 182, 212, 0.4);
       color: var(--accent-cyan);
+    }
+    .step:nth-child(3) .step-number {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.05));
+      border: 2px solid rgba(52, 211, 153, 0.4);
+      color: var(--accent-light);
     }
     .step-icon {
       margin-bottom: 8px;
@@ -633,7 +633,7 @@
     .remote-features li svg {
       width: 20px;
       height: 20px;
-      color: var(--accent-green);
+      color: var(--accent-primary);
       flex-shrink: 0;
     }
     .code-window {
@@ -649,7 +649,7 @@
       align-items: center;
       gap: 8px;
       padding: 14px 18px;
-      background: rgba(139, 92, 246, 0.05);
+      background: rgba(16, 185, 129, 0.05);
       border-bottom: 1px solid var(--border-color);
     }
     .code-dot {
@@ -674,11 +674,11 @@
       overflow-x: auto;
     }
     .code-comment { color: #6b6580; }
-    .code-keyword { color: var(--accent-purple); }
-    .code-string { color: var(--accent-green); }
+    .code-keyword { color: var(--accent-primary); }
+    .code-string { color: var(--accent-primary); }
     .code-var { color: var(--accent-cyan); }
-    .code-prompt { color: var(--accent-pink); }
-    .code-flag { color: var(--accent-orange); }
+    .code-prompt { color: var(--accent-light); }
+    .code-flag { color: var(--accent-amber); }
 
     /* ---- Tech Stack ---- */
     .tech-section {
@@ -784,7 +784,7 @@
       font-size: 0.85rem;
     }
     .footer-bottom a {
-      color: var(--accent-purple);
+      color: var(--accent-primary);
       text-decoration: none;
       font-weight: 600;
     }
@@ -836,7 +836,7 @@
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
           <path d="M16 7C11.03 7 7 11.03 7 16s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 2.5a2.2 2.2 0 110 4.4 2.2 2.2 0 010-4.4zm-4 8.5a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm8 0a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm-4 4a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6z" fill="white" fill-opacity="0.9"/>
-          <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+          <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#10b981"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
         </svg>
         AIDesk
       </a>
@@ -927,7 +927,7 @@
       <div class="features-grid">
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon purple">
+          <div class="feature-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
           </div>
           <h3><span data-lang="en">Multi-Agent Management</span><span data-lang="tr">Çoklu Ajan Yönetimi</span></h3>
@@ -935,7 +935,7 @@
         </div>
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon blue">
+          <div class="feature-icon cyan">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="20" cy="18" r="2"/></svg>
           </div>
           <h3><span data-lang="en">Task Queue & Priority System</span><span data-lang="tr">Görev Kuyruğu ve Öncelik Sistemi</span></h3>
@@ -959,7 +959,7 @@
         </div>
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon pink">
+          <div class="feature-icon amber">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
           </div>
           <h3><span data-lang="en">Project Management</span><span data-lang="tr">Proje Yönetimi</span></h3>
@@ -967,7 +967,7 @@
         </div>
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon orange">
+          <div class="feature-icon teal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           </div>
           <h3><span data-lang="en">Secure Vault</span><span data-lang="tr">Güvenli Kasa</span></h3>
@@ -975,7 +975,7 @@
         </div>
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon purple">
+          <div class="feature-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
           </div>
           <h3><span data-lang="en">MCP & Git Integration</span><span data-lang="tr">MCP ve Git Entegrasyonu</span></h3>
@@ -983,7 +983,7 @@
         </div>
 
         <div class="feature-card animate-on-scroll">
-          <div class="feature-icon blue">
+          <div class="feature-icon cyan">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           </div>
           <h3><span data-lang="en">Dark & Light Theme</span><span data-lang="tr">Karanlık ve Aydınlık Tema</span></h3>
@@ -1216,7 +1216,7 @@
           <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="32" height="32" rx="8" fill="url(#logo-grad2)"/>
             <path d="M16 7C11.03 7 7 11.03 7 16s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 2.5a2.2 2.2 0 110 4.4 2.2 2.2 0 010-4.4zm-4 8.5a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm8 0a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm-4 4a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6z" fill="white" fill-opacity="0.9"/>
-            <defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+            <defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#10b981"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
           </svg>
           <span>AIDesk</span>
         </div>
