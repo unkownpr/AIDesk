@@ -523,18 +523,20 @@
     .steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+      gap: 48px;
       position: relative;
+      max-width: 900px;
+      margin: 0 auto;
     }
     .steps::before {
       content: '';
       position: absolute;
-      top: 52px;
-      left: 15%;
-      right: 15%;
+      top: 32px;
+      left: calc(16.666% + 32px);
+      right: calc(16.666% + 32px);
       height: 2px;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan), var(--accent-cyan));
-      opacity: 0.3;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan));
+      opacity: 0.25;
     }
     .step {
       text-align: center;
@@ -549,38 +551,41 @@
       justify-content: center;
       font-size: 1.5rem;
       font-weight: 800;
-      margin: 0 auto 24px;
+      margin: 0 auto 20px;
       position: relative;
       z-index: 1;
+      background: var(--bg-primary);
     }
     .step:nth-child(1) .step-number {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
       border: 2px solid rgba(16, 185, 129, 0.4);
       color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
     }
     .step:nth-child(2) .step-number {
-      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
-      border: 2px solid rgba(6, 182, 212, 0.4);
-      color: var(--accent-cyan);
+      border: 2px solid rgba(16, 185, 129, 0.35);
+      color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.08);
     }
     .step:nth-child(3) .step-number {
-      background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.05));
-      border: 2px solid rgba(52, 211, 153, 0.4);
-      color: var(--accent-light);
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.06);
     }
     .step-icon {
       margin-bottom: 8px;
     }
     .step-icon svg { width: 28px; height: 28px; }
     .step h3 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 10px;
+      color: var(--text-primary);
     }
     .step p {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      max-width: 280px;
+      line-height: 1.6;
+      max-width: 260px;
       margin: 0 auto;
     }
 
