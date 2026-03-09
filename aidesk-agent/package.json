@@ -1,0 +1,42 @@
+{
+  "name": "aidesk-agent",
+  "version": "0.1.1",
+  "description": "AIDesk remote agent - connects to AIDesk server and executes Claude Code tasks",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssilistre/aidesk"
+  },
+  "author": "ssilistre.dev",
+  "type": "module",
+  "bin": {
+    "aidesk-agent": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.71"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "aidesk",
+    "claude",
+    "agent",
+    "ai",
+    "remote-agent",
+    "claude-code"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}

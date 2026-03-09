@@ -1,0 +1,66 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="128" y1="128" x2="384" y2="384" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#A78BFA"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Inner glow -->
+  <rect x="32" y="32" width="448" height="448" rx="72" fill="white" fill-opacity="0.05"/>
+
+  <!-- Brain/Network icon representing AI orchestration -->
+  <!-- Central node -->
+  <circle cx="256" cy="220" r="36" fill="white" fill-opacity="0.95"/>
+  <circle cx="256" cy="220" r="22" fill="url(#bg)"/>
+  <circle cx="256" cy="220" r="12" fill="white" fill-opacity="0.9"/>
+
+  <!-- Left node -->
+  <circle cx="148" cy="280" r="24" fill="white" fill-opacity="0.85"/>
+  <circle cx="148" cy="280" r="14" fill="url(#bg)"/>
+  <circle cx="148" cy="280" r="7" fill="white" fill-opacity="0.9"/>
+
+  <!-- Right node -->
+  <circle cx="364" cy="280" r="24" fill="white" fill-opacity="0.85"/>
+  <circle cx="364" cy="280" r="14" fill="url(#bg)"/>
+  <circle cx="364" cy="280" r="7" fill="white" fill-opacity="0.9"/>
+
+  <!-- Bottom left node -->
+  <circle cx="188" cy="370" r="20" fill="white" fill-opacity="0.7"/>
+  <circle cx="188" cy="370" r="12" fill="url(#bg)"/>
+  <circle cx="188" cy="370" r="6" fill="white" fill-opacity="0.9"/>
+
+  <!-- Bottom right node -->
+  <circle cx="324" cy="370" r="20" fill="white" fill-opacity="0.7"/>
+  <circle cx="324" cy="370" r="12" fill="url(#bg)"/>
+  <circle cx="324" cy="370" r="6" fill="white" fill-opacity="0.9"/>
+
+  <!-- Connection lines -->
+  <line x1="256" y1="220" x2="148" y2="280" stroke="white" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+  <line x1="256" y1="220" x2="364" y2="280" stroke="white" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+  <line x1="148" y1="280" x2="188" y2="370" stroke="white" stroke-opacity="0.3" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="364" y1="280" x2="324" y2="370" stroke="white" stroke-opacity="0.3" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="256" y1="220" x2="188" y2="370" stroke="white" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="256" y1="220" x2="324" y2="370" stroke="white" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <line x1="188" y1="370" x2="324" y2="370" stroke="white" stroke-opacity="0.2" stroke-width="2" stroke-linecap="round"/>
+  <line x1="148" y1="280" x2="364" y2="280" stroke="white" stroke-opacity="0.1" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 4"/>
+
+  <!-- Pulse rings on central node -->
+  <circle cx="256" cy="220" r="48" fill="none" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/>
+  <circle cx="256" cy="220" r="62" fill="none" stroke="white" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Small satellite dots -->
+  <circle cx="200" cy="170" r="5" fill="white" fill-opacity="0.3"/>
+  <circle cx="320" cy="180" r="4" fill="white" fill-opacity="0.25"/>
+  <circle cx="120" cy="340" r="4" fill="white" fill-opacity="0.2"/>
+  <circle cx="392" cy="340" r="4" fill="white" fill-opacity="0.2"/>
+
+  <!-- Connection to satellites -->
+  <line x1="256" y1="220" x2="200" y2="170" stroke="white" stroke-opacity="0.12" stroke-width="1" stroke-linecap="round"/>
+  <line x1="256" y1="220" x2="320" y2="180" stroke="white" stroke-opacity="0.12" stroke-width="1" stroke-linecap="round"/>
+</svg>

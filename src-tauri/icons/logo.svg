@@ -1,0 +1,61 @@
+<svg width="1024" height="1024" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logo-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="url(#logo-bg)" />
+
+  <!-- Brain - Left hemisphere -->
+  <path
+    d="M16 4.5 C14 4.5 12 5.6 11.2 7 C9.7 7.4 8.6 8.6 8.6 10.8 C8.6 11.6 8.8 12.2 9.2 12.8 C8.2 13.8 7.6 15 7.6 16.4 C7.6 18.1 8.8 19.7 10.3 20.4 C9.9 21.4 10 22.2 10.7 22.9 C11.4 24.2 12.8 24.9 14.4 25.2 L16 25.2"
+    stroke="white" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"
+  />
+
+  <!-- Brain - Right hemisphere -->
+  <path
+    d="M16 4.5 C18 4.5 20 5.6 20.8 7 C22.3 7.4 23.4 8.6 23.4 10.8 C23.4 11.6 23.2 12.2 22.8 12.8 C23.8 13.8 24.4 15 24.4 16.4 C24.4 18.1 23.2 19.7 21.7 20.4 C22.1 21.4 22 22.2 21.3 22.9 C20.6 24.2 19.2 24.9 17.6 25.2 L16 25.2"
+    stroke="white" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.9"
+  />
+
+  <!-- Center line -->
+  <line x1="16" y1="5.5" x2="16" y2="24.5" stroke="white" stroke-width="0.4" opacity="0.3" />
+
+  <!-- Brain stem -->
+  <path d="M14.8 24.5 L16 26.8 L17.2 24.5" stroke="white" stroke-width="0.7" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.65" />
+
+  <!-- Neural dots -->
+  <circle cx="11" cy="11.5" r="0.7" fill="white" opacity="0.75" />
+  <circle cx="21" cy="11.5" r="0.7" fill="white" opacity="0.75" />
+  <circle cx="9.5" cy="16.5" r="0.55" fill="white" opacity="0.6" />
+  <circle cx="22.5" cy="16.5" r="0.55" fill="white" opacity="0.6" />
+  <circle cx="16" cy="14" r="0.8" fill="white" opacity="0.85" />
+  <circle cx="13" cy="20" r="0.5" fill="white" opacity="0.5" />
+  <circle cx="19" cy="20" r="0.5" fill="white" opacity="0.5" />
+
+  <!-- Neural connections -->
+  <line x1="11" y1="11.5" x2="21" y2="11.5" stroke="white" stroke-width="0.25" opacity="0.15" />
+  <line x1="11" y1="11.5" x2="16" y2="14" stroke="white" stroke-width="0.25" opacity="0.12" />
+  <line x1="21" y1="11.5" x2="16" y2="14" stroke="white" stroke-width="0.25" opacity="0.12" />
+  <line x1="16" y1="14" x2="13" y2="20" stroke="white" stroke-width="0.2" opacity="0.1" />
+  <line x1="16" y1="14" x2="19" y2="20" stroke="white" stroke-width="0.2" opacity="0.1" />
+
+  <!-- AI Badge -->
+  <rect x="21.5" y="26" width="7.5" height="3.8" rx="1.6" fill="white" fill-opacity="0.15" stroke="white" stroke-opacity="0.3" stroke-width="0.3" />
+  <text
+    x="25.25"
+    y="28.6"
+    text-anchor="middle"
+    fill="white"
+    font-size="2.3"
+    font-weight="700"
+    font-family="system-ui, -apple-system, sans-serif"
+    letter-spacing="-0.03"
+  >
+    AI
+  </text>
+</svg>

@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/* === Theme Variables === */
+
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-tertiary: #27272a;
+  --bg-card: rgba(24, 24, 27, 0.4);
+  --border-primary: rgba(39, 39, 42, 0.8);
+  --border-secondary: rgba(39, 39, 42, 0.6);
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+  --text-muted: #52525b;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --accent-bg: rgba(16, 185, 129, 0.1);
+  --accent-border: rgba(16, 185, 129, 0.2);
+  --scrollbar: #27272a;
+  --scrollbar-hover: #3f3f46;
+}
+
+html.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f4f5;
+  --bg-tertiary: #e4e4e7;
+  --bg-card: rgba(244, 244, 245, 0.6);
+  --border-primary: rgba(228, 228, 231, 0.9);
+  --border-secondary: rgba(228, 228, 231, 0.7);
+  --text-primary: #09090b;
+  --text-secondary: #52525b;
+  --text-tertiary: #71717a;
+  --text-muted: #a1a1aa;
+  --accent: #059669;
+  --accent-hover: #047857;
+  --accent-bg: rgba(5, 150, 105, 0.08);
+  --accent-border: rgba(5, 150, 105, 0.2);
+  --scrollbar: #d4d4d8;
+  --scrollbar-hover: #a1a1aa;
+}
+
+/* === Base === */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* === Scrollbar === */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+/* === Theme utility classes === */
+
+.theme-bg { background: var(--bg-primary); }
+.theme-bg-secondary { background: var(--bg-secondary); }
+.theme-bg-card { background: var(--bg-card); }
+.theme-border { border-color: var(--border-primary); }
+.theme-text { color: var(--text-primary); }
+.theme-text-secondary { color: var(--text-secondary); }
+.theme-text-muted { color: var(--text-muted); }

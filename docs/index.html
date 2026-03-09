@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIDesk - Claude Code Agent Control Panel</title>
+  <meta name="description" content="AIDesk is a native desktop app for managing Claude Code AI agents. Create agents, assign tasks, track status, and view real-time logs.">
+  <meta name="theme-color" content="#0f0a1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0612;
+      --bg-secondary: #110d1f;
+      --bg-card: #161029;
+      --bg-card-hover: #1c1435;
+      --border-color: rgba(139, 92, 246, 0.15);
+      --border-color-hover: rgba(139, 92, 246, 0.35);
+      --text-primary: #f1f0f5;
+      --text-secondary: #a09bb5;
+      --text-muted: #6b6580;
+      --accent-purple: #8b5cf6;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --accent-green: #10b981;
+      --accent-orange: #f59e0b;
+      --gradient-main: linear-gradient(135deg, #8b5cf6, #3b82f6);
+      --gradient-hero: linear-gradient(135deg, #8b5cf6 0%, #6366f1 25%, #3b82f6 50%, #06b6d4 100%);
+      --gradient-card: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(59, 130, 246, 0.05));
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+
+    /* ---- Animations ---- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+      50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.4); }
+    }
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .animate-on-scroll.visible:nth-child(2) { transition-delay: 0.1s; }
+    .animate-on-scroll.visible:nth-child(3) { transition-delay: 0.2s; }
+    .animate-on-scroll.visible:nth-child(4) { transition-delay: 0.3s; }
+    .animate-on-scroll.visible:nth-child(5) { transition-delay: 0.4s; }
+    .animate-on-scroll.visible:nth-child(6) { transition-delay: 0.5s; }
+
+    /* ---- Language Toggle ---- */
+    [data-lang="tr"] { display: none; }
+    body.lang-tr [data-lang="en"] { display: none; }
+    body.lang-tr [data-lang="tr"] { display: inline; }
+    body.lang-tr span[data-lang="tr"],
+    span[data-lang="en"] { display: inline; }
+    body.lang-tr span[data-lang="en"] { display: none; }
+    body.lang-tr div[data-lang="tr"],
+    body.lang-tr p[data-lang="tr"],
+    body.lang-tr h2[data-lang="tr"],
+    body.lang-tr h3[data-lang="tr"],
+    body.lang-tr li[data-lang="tr"] { display: block; }
+    body.lang-tr div[data-lang="en"],
+    body.lang-tr p[data-lang="en"],
+    body.lang-tr h2[data-lang="en"],
+    body.lang-tr h3[data-lang="en"],
+    body.lang-tr li[data-lang="en"] { display: none; }
+    div[data-lang="tr"],
+    p[data-lang="tr"],
+    h2[data-lang="tr"],
+    h3[data-lang="tr"],
+    li[data-lang="tr"] { display: none; }
+
+    /* ---- Container ---- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---- Nav ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(10, 6, 18, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.3s;
+    }
+    nav.scrolled {
+      padding: 10px 0;
+      background: rgba(10, 6, 18, 0.95);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .lang-toggle button {
+      padding: 6px 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .lang-toggle button.active {
+      background: var(--accent-purple);
+      color: white;
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 4px;
+    }
+    .mobile-menu-btn svg { width: 28px; height: 28px; }
+
+    /* ---- Hero ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%);
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      animation: fadeInUp 1s ease-out;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent-purple);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      animation: pulse-glow 2s infinite;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      background: var(--gradient-hero);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 6s ease infinite;
+    }
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      font-weight: 400;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn svg { width: 20px; height: 20px; }
+    .btn-primary {
+      background: var(--gradient-main);
+      color: white;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.45);
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover {
+      border-color: var(--border-color-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-color);
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ---- Section ---- */
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-purple);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ---- Features ---- */
+    .features-section {
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      position: relative;
+      padding: 32px;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      transition: all 0.35s;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-main);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .feature-card:hover {
+      border-color: var(--border-color-hover);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+    }
+    .feature-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+    .feature-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+    .feature-icon.cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+    .feature-icon.pink { background: rgba(236, 72, 153, 0.15); color: var(--accent-pink); }
+    .feature-icon.green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+    .feature-icon.orange { background: rgba(245, 158, 11, 0.15); color: var(--accent-orange); }
+    .feature-icon svg { width: 24px; height: 24px; }
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ---- How It Works ---- */
+    .how-section {
+      background: var(--bg-secondary);
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 52px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), var(--accent-cyan));
+      opacity: 0.3;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 auto 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .step:nth-child(1) .step-number {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.05));
+      border: 2px solid rgba(139, 92, 246, 0.4);
+      color: var(--accent-purple);
+    }
+    .step:nth-child(2) .step-number {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05));
+      border: 2px solid rgba(59, 130, 246, 0.4);
+      color: var(--accent-blue);
+    }
+    .step:nth-child(3) .step-number {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
+      border: 2px solid rgba(6, 182, 212, 0.4);
+      color: var(--accent-cyan);
+    }
+    .step-icon {
+      margin-bottom: 8px;
+    }
+    .step-icon svg { width: 28px; height: 28px; }
+    .step h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    /* ---- Remote Agent ---- */
+    .remote-section {
+      background: var(--bg-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .remote-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+    }
+    .remote-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .remote-text h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .remote-text p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 28px;
+    }
+    .remote-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .remote-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .remote-features li svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent-green);
+      flex-shrink: 0;
+    }
+    .code-window {
+      position: relative;
+      background: #0d0821;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-glow);
+    }
+    .code-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: rgba(139, 92, 246, 0.05);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .code-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .code-dot.red { background: #ff5f57; }
+    .code-dot.yellow { background: #ffbd2e; }
+    .code-dot.green { background: #28c840; }
+    .code-titlebar span {
+      margin-left: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .code-body {
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .code-comment { color: #6b6580; }
+    .code-keyword { color: var(--accent-purple); }
+    .code-string { color: var(--accent-green); }
+    .code-var { color: var(--accent-cyan); }
+    .code-prompt { color: var(--accent-pink); }
+    .code-flag { color: var(--accent-orange); }
+
+    /* ---- Tech Stack ---- */
+    .tech-section {
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .tech-card {
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--gradient-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      transition: all 0.3s;
+    }
+    .tech-card:hover {
+      border-color: var(--border-color-hover);
+      transform: translateY(-4px);
+    }
+    .tech-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .tech-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .tech-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ---- Quick Start ---- */
+    .quickstart-section {
+      background: var(--bg-secondary);
+    }
+    .quickstart-window {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #0d0821;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-glow);
+    }
+    .quickstart-body {
+      padding: 28px 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 2;
+    }
+    .quickstart-body .line {
+      display: block;
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-primary);
+    }
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-brand svg { width: 28px; height: 28px; }
+    .footer-brand span { font-weight: 700; font-size: 1.1rem; }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .footer-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+    .footer-links a svg { width: 18px; height: 18px; }
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .footer-bottom a {
+      color: var(--accent-purple);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer-bottom a:hover { text-decoration: underline; }
+
+    /* ---- Mobile ---- */
+    @media (max-width: 900px) {
+      .steps { grid-template-columns: 1fr; gap: 48px; }
+      .steps::before { display: none; }
+      .remote-content { grid-template-columns: 1fr; gap: 40px; }
+      .hero-stats { gap: 28px; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 6, 18, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border-color);
+        gap: 16px;
+      }
+      .mobile-menu-btn { display: block; }
+      .features-grid { grid-template-columns: 1fr; }
+      .tech-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .hero { padding-top: 100px; }
+      section { padding: 70px 0; }
+      .quickstart-body { padding: 20px; font-size: 0.75rem; }
+    }
+    @media (max-width: 480px) {
+      .tech-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; max-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+          <path d="M16 7C11.03 7 7 11.03 7 16s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 2.5a2.2 2.2 0 110 4.4 2.2 2.2 0 010-4.4zm-4 8.5a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm8 0a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm-4 4a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6z" fill="white" fill-opacity="0.9"/>
+          <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+        </svg>
+        AIDesk
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features"><span data-lang="en">Features</span><span data-lang="tr">Ozellikler</span></a></li>
+        <li><a href="#how-it-works"><span data-lang="en">How It Works</span><span data-lang="tr">Nasil Calisir</span></a></li>
+        <li><a href="#remote"><span data-lang="en">Remote Agent</span><span data-lang="tr">Uzak Ajan</span></a></li>
+        <li><a href="#tech"><span data-lang="en">Tech Stack</span><span data-lang="tr">Teknoloji</span></a></li>
+        <li><a href="#quickstart"><span data-lang="en">Quick Start</span><span data-lang="tr">Hizli Baslangic</span></a></li>
+        <li>
+          <div class="lang-toggle">
+            <button id="langEn" class="active" onclick="setLang('en')">EN</button>
+            <button id="langTr" onclick="setLang('tr')">TR</button>
+          </div>
+        </li>
+      </ul>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        <span data-lang="en">Open Source Desktop App</span>
+        <span data-lang="tr">Acik Kaynak Masaustu Uygulama</span>
+      </div>
+      <h1>AIDesk</h1>
+      <p class="hero-tagline">
+        <span data-lang="en">The native control panel for managing Claude Code AI agents. Create, assign, track, and stream in real-time.</span>
+        <span data-lang="tr">Claude Code yapay zeka ajanlarini yonetmek icin yerel kontrol paneli. Olusturun, gorevlendirin, takip edin ve canli izleyin.</span>
+      </p>
+      <div class="hero-buttons">
+        <a href="https://github.com/unkownpr/AIDesk" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span data-lang="en">View on GitHub</span>
+          <span data-lang="tr">GitHub'da Gor</span>
+        </a>
+        <a href="https://www.npmjs.com/package/aidesk-agent" target="_blank" rel="noopener" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/></svg>
+          <span>npm package</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">Tauri v2</div>
+          <div class="hero-stat-label"><span data-lang="en">Native Performance</span><span data-lang="tr">Yerel Performans</span></div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">Rust</div>
+          <div class="hero-stat-label"><span data-lang="en">Backend Engine</span><span data-lang="tr">Arka Uc Motoru</span></div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">AES-256</div>
+          <div class="hero-stat-label"><span data-lang="en">Encrypted Vault</span><span data-lang="tr">Sifrelenmis Kasa</span></div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">SSE</div>
+          <div class="hero-stat-label"><span data-lang="en">Real-time Logs</span><span data-lang="tr">Canli Loglar</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label"><span data-lang="en">Features</span><span data-lang="tr">Ozellikler</span></span>
+        <h2 class="section-title">
+          <span data-lang="en">Everything You Need to Manage AI Agents</span>
+          <span data-lang="tr">Yapay Zeka Ajanlarini Yonetmek Icin Gereken Her Sey</span>
+        </h2>
+        <p class="section-desc">
+          <span data-lang="en">A complete desktop control panel for orchestrating Claude Code agents at any scale.</span>
+          <span data-lang="tr">Claude Code ajanlarini her olcekte yonetmek icin eksiksiz bir masaustu kontrol paneli.</span>
+        </p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <h3><span data-lang="en">Multi-Agent Management</span><span data-lang="tr">Coklu Ajan Yonetimi</span></h3>
+          <p><span data-lang="en">Create and manage local and remote agents from a unified dashboard. Monitor status and assign tasks efficiently.</span><span data-lang="tr">Birlesik bir panelden yerel ve uzak ajanlar olusturun ve yonetin. Durumlari izleyin, gorevleri verimli atayin.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="20" cy="18" r="2"/></svg>
+          </div>
+          <h3><span data-lang="en">Task Queue & Priority System</span><span data-lang="tr">Gorev Kuyrugu ve Oncelik Sistemi</span></h3>
+          <p><span data-lang="en">Organize tasks with critical, high, medium, and low priority levels. Automatic queue-based task distribution.</span><span data-lang="tr">Gorevleri kritik, yuksek, orta ve dusuk oncelik seviyeleriyle duzenleyin. Otomatik kuyruk tabanli gorev dagitimi.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3><span data-lang="en">Real-time Log Streaming</span><span data-lang="tr">Canli Log Akisi</span></h3>
+          <p><span data-lang="en">Watch agent execution in real-time with SSE-powered log streaming. See every step as it happens.</span><span data-lang="tr">SSE destekli canli log akisiyla ajan calismasini anlik izleyin. Her adimi oldugu anda gorun.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/></svg>
+          </div>
+          <h3><span data-lang="en">Remote Agent Support</span><span data-lang="tr">Uzak Ajan Destegi</span></h3>
+          <p><span data-lang="en">Connect remote agents with a single npx command. Firewall-friendly HTTP polling architecture.</span><span data-lang="tr">Tek bir npx komutuyla uzak ajanlari baglayinr. Guvenlik duvari dostu HTTP yoklama mimarisi.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon pink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <h3><span data-lang="en">Project Management</span><span data-lang="tr">Proje Yonetimi</span></h3>
+          <p><span data-lang="en">Link tasks to projects and directories. Keep your work organized with project-based task grouping.</span><span data-lang="tr">Gorevleri projelere ve dizinlere baglayin. Proje tabanli gorev gruplama ile isinizi duzenli tutun.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <h3><span data-lang="en">Secure Vault</span><span data-lang="tr">Guvenli Kasa</span></h3>
+          <p><span data-lang="en">Store API keys and secrets with AES-256-GCM encryption. Vault key file with strict OS-level permissions.</span><span data-lang="tr">API anahtarlarini ve sirlari AES-256-GCM sifrelemesiyle saklayin. Siki isletim sistemi izinleriyle kasa dosyasi.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          </div>
+          <h3><span data-lang="en">MCP & Git Integration</span><span data-lang="tr">MCP ve Git Entegrasyonu</span></h3>
+          <p><span data-lang="en">Configure MCP servers and Git settings per agent. Seamless integration with your development workflow.</span><span data-lang="tr">Ajan bazinda MCP sunuculari ve Git ayarlari yapilandirin. Gelistirme is akisinizla kesintisiz entegrasyon.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </div>
+          <h3><span data-lang="en">Dark & Light Theme</span><span data-lang="tr">Karanlik ve Aydinlik Tema</span></h3>
+          <p><span data-lang="en">Switch between dark and light themes. Centralized theme system with smooth transitions.</span><span data-lang="tr">Karanlik ve aydinlik temalar arasinda gecis yapin. Akici gecisli merkezi tema sistemi.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </div>
+          <h3><span data-lang="en">macOS Native Notifications</span><span data-lang="tr">macOS Yerel Bildirimleri</span></h3>
+          <p><span data-lang="en">Get notified when tasks complete, fail, or agents go offline. Native macOS notification integration.</span><span data-lang="tr">Gorevler tamamlandiginda, basarisiz oldugunda veya ajanlar cevrimdisi oldugunda bildirim alin.</span></p>
+        </div>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3><span data-lang="en">Activity Log & Dashboard</span><span data-lang="tr">Aktivite Logu ve Pano</span></h3>
+          <p><span data-lang="en">Comprehensive dashboard with task filtering, search, agent health monitoring, and offline warnings.</span><span data-lang="tr">Gorev filtreleme, arama, ajan saglik izleme ve cevrimdisi uyarilari iceren kapsamli pano.</span></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="how-section" id="how-it-works">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label"><span data-lang="en">How It Works</span><span data-lang="tr">Nasil Calisir</span></span>
+        <h2 class="section-title">
+          <span data-lang="en">Three Steps to AI-Powered Development</span>
+          <span data-lang="tr">Yapay Zeka Destekli Gelistirme Icin Uc Adim</span>
+        </h2>
+      </div>
+      <div class="steps">
+        <div class="step animate-on-scroll">
+          <div class="step-number">1</div>
+          <h3><span data-lang="en">Create Agents</span><span data-lang="tr">Ajan Olusturun</span></h3>
+          <p><span data-lang="en">Set up local or remote agents through the AIDesk UI. Configure project paths, MCP servers, and Git settings.</span><span data-lang="tr">AIDesk arayuzu uzerinden yerel veya uzak ajanlar olusturun. Proje yollarini, MCP sunucularini ve Git ayarlarini yapilandirin.</span></p>
+        </div>
+        <div class="step animate-on-scroll">
+          <div class="step-number">2</div>
+          <h3><span data-lang="en">Assign Tasks</span><span data-lang="tr">Gorev Atayin</span></h3>
+          <p><span data-lang="en">Create tasks with priority levels and assign them to agents. The orchestrator automatically distributes queued tasks.</span><span data-lang="tr">Oncelik seviyeleriyle gorevler olusturun ve ajanlara atayin. Orkestrator kuyruklu gorevleri otomatik dagitir.</span></p>
+        </div>
+        <div class="step animate-on-scroll">
+          <div class="step-number">3</div>
+          <h3><span data-lang="en">Execute & Monitor</span><span data-lang="tr">Calistirin ve Izleyin</span></h3>
+          <p><span data-lang="en">Agents execute via Claude Code SDK with real-time SSE log streaming. Track progress and get native notifications.</span><span data-lang="tr">Ajanlar Claude Code SDK ile calisir, canli SSE log akisi saglar. Ilerlemeyi takip edin ve yerel bildirimler alin.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REMOTE AGENT ============ -->
+  <section class="remote-section" id="remote">
+    <div class="container">
+      <div class="remote-content">
+        <div class="remote-text animate-on-scroll">
+          <span class="section-label"><span data-lang="en">Remote Agents</span><span data-lang="tr">Uzak Ajanlar</span></span>
+          <h2>
+            <span data-lang="en">Connect From Anywhere With a Single Command</span>
+            <span data-lang="tr">Tek Bir Komutla Her Yerden Baglanin</span>
+          </h2>
+          <p>
+            <span data-lang="en">Run agents on any machine with the <code style="color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;font-size:0.95em">aidesk-agent</code> npm package. Agents poll the AIDesk server over HTTP, making it work through firewalls and NAT.</span>
+            <span data-lang="tr"><code style="color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;font-size:0.95em">aidesk-agent</code> npm paketi ile herhangi bir makinede ajan calistirin. Ajanlar AIDesk sunucusunu HTTP uzerinden yoklar, guvenlik duvarlari ve NAT arkasinda calisir.</span>
+          </p>
+          <ul class="remote-features">
+            <li data-lang="en">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Zero configuration - just set token and server URL
+            </li>
+            <li data-lang="tr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Sifir yapilandirma - sadece token ve sunucu URL'si ayarlayin
+            </li>
+            <li data-lang="en">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Firewall-friendly HTTP polling architecture
+            </li>
+            <li data-lang="tr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Guvenlik duvari dostu HTTP yoklama mimarisi
+            </li>
+            <li data-lang="en">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              60-second heartbeat with auto-offline detection
+            </li>
+            <li data-lang="tr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              60 saniye kalp atisi ile otomatik cevrimdisi tespiti
+            </li>
+            <li data-lang="en">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Secure token-based authentication
+            </li>
+            <li data-lang="tr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+              Guvenli token tabanli kimlik dogrulama
+            </li>
+          </ul>
+        </div>
+        <div class="animate-on-scroll">
+          <div class="code-window">
+            <div class="code-titlebar">
+              <div class="code-dot red"></div>
+              <div class="code-dot yellow"></div>
+              <div class="code-dot green"></div>
+              <span>Terminal</span>
+            </div>
+            <div class="code-body">
+              <div><span class="code-comment"># <span data-lang="en">Install and run the remote agent</span><span data-lang="tr">Uzak ajani yukleyin ve calistirin</span></span></div>
+              <br>
+              <div><span class="code-prompt">$</span> <span class="code-var">AIDESK_TOKEN</span>=<span class="code-string">your-agent-token</span> \</div>
+              <div>&nbsp;&nbsp;<span class="code-keyword">npx</span> <span class="code-string">aidesk-agent</span> \</div>
+              <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-flag">--server</span> <span class="code-string">https://your-server:3939</span></div>
+              <br>
+              <div><span class="code-comment"># <span data-lang="en">Or install globally</span><span data-lang="tr">Veya global olarak yukleyin</span></span></div>
+              <div><span class="code-prompt">$</span> <span class="code-keyword">npm</span> install <span class="code-flag">-g</span> <span class="code-string">aidesk-agent</span></div>
+              <div><span class="code-prompt">$</span> <span class="code-keyword">aidesk-agent</span> <span class="code-flag">--server</span> <span class="code-string">https://your-server:3939</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TECH STACK ============ -->
+  <section class="tech-section" id="tech">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label"><span data-lang="en">Tech Stack</span><span data-lang="tr">Teknoloji Yigini</span></span>
+        <h2 class="section-title">
+          <span data-lang="en">Built With Modern Technologies</span>
+          <span data-lang="tr">Modern Teknolojilerle Insa Edildi</span>
+        </h2>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#129408;</span>
+          <h3>Rust</h3>
+          <p><span data-lang="en">Backend & Security</span><span data-lang="tr">Arka Uc ve Guvenlik</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#9881;&#65039;</span>
+          <h3>Tauri v2</h3>
+          <p><span data-lang="en">Native Desktop</span><span data-lang="tr">Yerel Masaustu</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#9883;</span>
+          <h3>React 19</h3>
+          <p><span data-lang="en">UI Framework</span><span data-lang="tr">Arayuz Cercevesi</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#128451;</span>
+          <h3>SQLite</h3>
+          <p><span data-lang="en">WAL Mode Database</span><span data-lang="tr">WAL Mod Veritabani</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#129302;</span>
+          <h3>Claude SDK</h3>
+          <p><span data-lang="en">Agent Execution</span><span data-lang="tr">Ajan Calistirma</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#127912;</span>
+          <h3>Tailwind CSS</h3>
+          <p><span data-lang="en">Styling</span><span data-lang="tr">Stil Sistemi</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#128295;</span>
+          <h3>Axum</h3>
+          <p><span data-lang="en">HTTP Server</span><span data-lang="tr">HTTP Sunucusu</span></p>
+        </div>
+        <div class="tech-card animate-on-scroll">
+          <span class="tech-card-icon">&#128272;</span>
+          <h3>AES-256-GCM</h3>
+          <p><span data-lang="en">Encryption</span><span data-lang="tr">Sifreleme</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK START ============ -->
+  <section class="quickstart-section" id="quickstart">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-label"><span data-lang="en">Quick Start</span><span data-lang="tr">Hizli Baslangic</span></span>
+        <h2 class="section-title">
+          <span data-lang="en">Get Up and Running in Minutes</span>
+          <span data-lang="tr">Dakikalar Icinde Baslayin</span>
+        </h2>
+        <p class="section-desc">
+          <span data-lang="en">Clone, build, and launch AIDesk with just a few commands.</span>
+          <span data-lang="tr">Sadece birkacc komutla AIDesk'i klonlayin, derleyin ve baslatmin.</span>
+        </p>
+      </div>
+      <div class="quickstart-window animate-on-scroll">
+        <div class="code-titlebar">
+          <div class="code-dot red"></div>
+          <div class="code-dot yellow"></div>
+          <div class="code-dot green"></div>
+          <span>Terminal</span>
+        </div>
+        <div class="quickstart-body">
+          <span class="line"><span class="code-comment"># <span data-lang="en">Clone the repository</span><span data-lang="tr">Depoyu klonlayin</span></span></span>
+          <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">git</span> clone <span class="code-string">https://github.com/unkownpr/AIDesk.git</span></span>
+          <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cd</span> <span class="code-string">AIDesk</span></span>
+          <span class="line">&nbsp;</span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Install frontend dependencies</span><span data-lang="tr">On yuz bagimliklarini yukleyin</span></span></span>
+          <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">pnpm</span> install</span>
+          <span class="line">&nbsp;</span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Build the agent runner sidecar</span><span data-lang="tr">Ajan calistirici sidecar'i derleyin</span></span></span>
+          <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cd</span> <span class="code-string">agent-runner</span> && <span class="code-keyword">npm</span> install && <span class="code-keyword">npm</span> run build && <span class="code-keyword">cd</span> ..</span>
+          <span class="line">&nbsp;</span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Launch in development mode</span><span data-lang="tr">Gelistirme modunda baslatim</span></span></span>
+          <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cargo</span> tauri dev</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="url(#logo-grad2)"/>
+            <path d="M16 7C11.03 7 7 11.03 7 16s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 2.5a2.2 2.2 0 110 4.4 2.2 2.2 0 010-4.4zm-4 8.5a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm8 0a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6zm-4 4a1.8 1.8 0 110-3.6 1.8 1.8 0 010 3.6z" fill="white" fill-opacity="0.9"/>
+            <defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#8b5cf6"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+          </svg>
+          <span>AIDesk</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/unkownpr/AIDesk" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.npmjs.com/package/aidesk-agent" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/></svg>
+            npm
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span data-lang="en">Built with care by</span>
+        <span data-lang="tr">Ozenle yapildi:</span>
+        <a href="https://ssilistre.dev" target="_blank" rel="noopener">ssilistre.dev</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Language Toggle ----
+    function setLang(lang) {
+      if (lang === 'tr') {
+        document.body.classList.add('lang-tr');
+      } else {
+        document.body.classList.remove('lang-tr');
+      }
+      document.getElementById('langEn').classList.toggle('active', lang === 'en');
+      document.getElementById('langTr').classList.toggle('active', lang === 'tr');
+      localStorage.setItem('aidesk-lang', lang);
+    }
+
+    // Restore saved language
+    const savedLang = localStorage.getItem('aidesk-lang');
+    if (savedLang === 'tr') setLang('tr');
+
+    // ---- Scroll Animations ----
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // ---- Nav Scroll Effect ----
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ---- Mobile Menu ----
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close mobile menu on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Close mobile menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        navLinks.classList.remove('open');
+      }
+    });
+
+    // ---- Smooth scroll for anchor links ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

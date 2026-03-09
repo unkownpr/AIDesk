@@ -1,0 +1,40 @@
+{
+  "name": "aidesk",
+  "version": "0.1.0",
+  "description": "AIDesk - Claude Code Agent Control Panel",
+  "type": "module",
+  "scripts": {
+    "dev:frontend": "vite",
+    "build:frontend": "tsc && vite build",
+    "build:runner": "cd agent-runner && npm install && npm run build",
+    "dev": "npm run build:runner && cargo tauri dev",
+    "build": "npm run build:runner && cargo tauri build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/plugin-dialog": "^2.6.0",
+    "@tauri-apps/plugin-notification": "^2.3.3",
+    "@tauri-apps/plugin-shell": "^2.3.5",
+    "@tauri-apps/plugin-store": "^2.4.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.1",
+    "tailwind-merge": "^3.5.0"
+  }
+}
