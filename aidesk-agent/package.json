@@ -1,11 +1,11 @@
 {
   "name": "aidesk-agent",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AIDesk remote agent - connects to AIDesk server and executes Claude Code tasks",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ssilistre/aidesk"
+    "url": "https://github.com/unkownpr/AIDesk"
   },
   "author": "ssilistre.dev",
   "type": "module",
