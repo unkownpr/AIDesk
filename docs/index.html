@@ -344,6 +344,59 @@
       background: var(--bg-card-hover);
       transform: translateY(-2px);
     }
+    .hero-screenshot {
+      margin-top: 56px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    .hero-screenshot::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      max-width: 804px;
+      width: calc(100% + 4px);
+      margin: 0 auto;
+      border-radius: calc(var(--radius-lg) + 2px);
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue), var(--accent-cyan));
+      opacity: 0.5;
+      z-index: 0;
+      filter: blur(1px);
+    }
+    .hero-screenshot::after {
+      content: '';
+      position: absolute;
+      inset: -40px;
+      max-width: 880px;
+      width: calc(100% + 80px);
+      margin: 0 auto;
+      border-radius: 40px;
+      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15), transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    .hero-screenshot img {
+      max-width: 800px;
+      width: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      box-shadow:
+        0 0 80px rgba(139, 92, 246, 0.2),
+        0 0 40px rgba(59, 130, 246, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      position: relative;
+      z-index: 1;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hero-screenshot:hover img {
+      transform: translateY(-4px) scale(1.005);
+      box-shadow:
+        0 0 100px rgba(139, 92, 246, 0.3),
+        0 0 60px rgba(59, 130, 246, 0.15),
+        0 24px 70px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
     .hero-stats {
       display: flex;
       justify-content: center;
@@ -788,11 +841,11 @@
         AIDesk
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#features"><span data-lang="en">Features</span><span data-lang="tr">Ozellikler</span></a></li>
-        <li><a href="#how-it-works"><span data-lang="en">How It Works</span><span data-lang="tr">Nasil Calisir</span></a></li>
+        <li><a href="#features"><span data-lang="en">Features</span><span data-lang="tr">Özellikler</span></a></li>
+        <li><a href="#how-it-works"><span data-lang="en">How It Works</span><span data-lang="tr">Nasıl Çalışır</span></a></li>
         <li><a href="#remote"><span data-lang="en">Remote Agent</span><span data-lang="tr">Uzak Ajan</span></a></li>
         <li><a href="#tech"><span data-lang="en">Tech Stack</span><span data-lang="tr">Teknoloji</span></a></li>
-        <li><a href="#quickstart"><span data-lang="en">Quick Start</span><span data-lang="tr">Hizli Baslangic</span></a></li>
+        <li><a href="#quickstart"><span data-lang="en">Quick Start</span><span data-lang="tr">Hızlı Başlangıç</span></a></li>
         <li>
           <div class="lang-toggle">
             <button id="langEn" class="active" onclick="setLang('en')">EN</button>
@@ -815,23 +868,26 @@
       <div class="hero-badge">
         <span class="dot"></span>
         <span data-lang="en">Open Source Desktop App</span>
-        <span data-lang="tr">Acik Kaynak Masaustu Uygulama</span>
+        <span data-lang="tr">Açık Kaynak Masaüstü Uygulama</span>
       </div>
       <h1>AIDesk</h1>
       <p class="hero-tagline">
         <span data-lang="en">The native control panel for managing Claude Code AI agents. Create, assign, track, and stream in real-time.</span>
-        <span data-lang="tr">Claude Code yapay zeka ajanlarini yonetmek icin yerel kontrol paneli. Olusturun, gorevlendirin, takip edin ve canli izleyin.</span>
+        <span data-lang="tr">Claude Code yapay zekâ ajanlarını yönetmek için yerel kontrol paneli. Oluşturun, görevlendirin, takip edin ve canlı izleyin.</span>
       </p>
       <div class="hero-buttons">
         <a href="https://github.com/unkownpr/AIDesk" target="_blank" rel="noopener" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           <span data-lang="en">View on GitHub</span>
-          <span data-lang="tr">GitHub'da Gor</span>
+          <span data-lang="tr">GitHub'da Gör</span>
         </a>
         <a href="https://www.npmjs.com/package/aidesk-agent" target="_blank" rel="noopener" class="btn btn-secondary">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/></svg>
           <span>npm package</span>
         </a>
+      </div>
+      <div class="hero-screenshot">
+        <img src="screen.png" alt="AIDesk Screenshot" loading="lazy">
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
@@ -840,15 +896,15 @@
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">Rust</div>
-          <div class="hero-stat-label"><span data-lang="en">Backend Engine</span><span data-lang="tr">Arka Uc Motoru</span></div>
+          <div class="hero-stat-label"><span data-lang="en">Backend Engine</span><span data-lang="tr">Arka Uç Motoru</span></div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">AES-256</div>
-          <div class="hero-stat-label"><span data-lang="en">Encrypted Vault</span><span data-lang="tr">Sifrelenmis Kasa</span></div>
+          <div class="hero-stat-label"><span data-lang="en">Encrypted Vault</span><span data-lang="tr">Şifrelenmiş Kasa</span></div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">SSE</div>
-          <div class="hero-stat-label"><span data-lang="en">Real-time Logs</span><span data-lang="tr">Canli Loglar</span></div>
+          <div class="hero-stat-label"><span data-lang="en">Real-time Logs</span><span data-lang="tr">Canlı Loglar</span></div>
         </div>
       </div>
     </div>
@@ -858,14 +914,14 @@
   <section class="features-section" id="features">
     <div class="container">
       <div class="section-header animate-on-scroll">
-        <span class="section-label"><span data-lang="en">Features</span><span data-lang="tr">Ozellikler</span></span>
+        <span class="section-label"><span data-lang="en">Features</span><span data-lang="tr">Özellikler</span></span>
         <h2 class="section-title">
           <span data-lang="en">Everything You Need to Manage AI Agents</span>
-          <span data-lang="tr">Yapay Zeka Ajanlarini Yonetmek Icin Gereken Her Sey</span>
+          <span data-lang="tr">Yapay Zekâ Ajanlarını Yönetmek İçin Gereken Her Şey</span>
         </h2>
         <p class="section-desc">
           <span data-lang="en">A complete desktop control panel for orchestrating Claude Code agents at any scale.</span>
-          <span data-lang="tr">Claude Code ajanlarini her olcekte yonetmek icin eksiksiz bir masaustu kontrol paneli.</span>
+          <span data-lang="tr">Claude Code ajanlarını her ölçekte yönetmek için eksiksiz bir masaüstü kontrol paneli.</span>
         </p>
       </div>
       <div class="features-grid">
@@ -874,48 +930,48 @@
           <div class="feature-icon purple">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
           </div>
-          <h3><span data-lang="en">Multi-Agent Management</span><span data-lang="tr">Coklu Ajan Yonetimi</span></h3>
-          <p><span data-lang="en">Create and manage local and remote agents from a unified dashboard. Monitor status and assign tasks efficiently.</span><span data-lang="tr">Birlesik bir panelden yerel ve uzak ajanlar olusturun ve yonetin. Durumlari izleyin, gorevleri verimli atayin.</span></p>
+          <h3><span data-lang="en">Multi-Agent Management</span><span data-lang="tr">Çoklu Ajan Yönetimi</span></h3>
+          <p><span data-lang="en">Create and manage local and remote agents from a unified dashboard. Monitor status and assign tasks efficiently.</span><span data-lang="tr">Birleşik bir panelden yerel ve uzak ajanlar oluşturun ve yönetin. Durumları izleyin, görevleri verimli atayın.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="20" cy="18" r="2"/></svg>
           </div>
-          <h3><span data-lang="en">Task Queue & Priority System</span><span data-lang="tr">Gorev Kuyrugu ve Oncelik Sistemi</span></h3>
-          <p><span data-lang="en">Organize tasks with critical, high, medium, and low priority levels. Automatic queue-based task distribution.</span><span data-lang="tr">Gorevleri kritik, yuksek, orta ve dusuk oncelik seviyeleriyle duzenleyin. Otomatik kuyruk tabanli gorev dagitimi.</span></p>
+          <h3><span data-lang="en">Task Queue & Priority System</span><span data-lang="tr">Görev Kuyruğu ve Öncelik Sistemi</span></h3>
+          <p><span data-lang="en">Organize tasks with critical, high, medium, and low priority levels. Automatic queue-based task distribution.</span><span data-lang="tr">Görevleri kritik, yüksek, orta ve düşük öncelik seviyeleriyle düzenleyin. Otomatik kuyruk tabanlı görev dağıtımı.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon cyan">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
-          <h3><span data-lang="en">Real-time Log Streaming</span><span data-lang="tr">Canli Log Akisi</span></h3>
-          <p><span data-lang="en">Watch agent execution in real-time with SSE-powered log streaming. See every step as it happens.</span><span data-lang="tr">SSE destekli canli log akisiyla ajan calismasini anlik izleyin. Her adimi oldugu anda gorun.</span></p>
+          <h3><span data-lang="en">Real-time Log Streaming</span><span data-lang="tr">Canlı Log Akışı</span></h3>
+          <p><span data-lang="en">Watch agent execution in real-time with SSE-powered log streaming. See every step as it happens.</span><span data-lang="tr">SSE destekli canlı log akışıyla ajan çalışmasını anlık izleyin. Her adımı olduğu anda görün.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/></svg>
           </div>
-          <h3><span data-lang="en">Remote Agent Support</span><span data-lang="tr">Uzak Ajan Destegi</span></h3>
-          <p><span data-lang="en">Connect remote agents with a single npx command. Firewall-friendly HTTP polling architecture.</span><span data-lang="tr">Tek bir npx komutuyla uzak ajanlari baglayinr. Guvenlik duvari dostu HTTP yoklama mimarisi.</span></p>
+          <h3><span data-lang="en">Remote Agent Support</span><span data-lang="tr">Uzak Ajan Desteği</span></h3>
+          <p><span data-lang="en">Connect remote agents with a single npx command. Firewall-friendly HTTP polling architecture.</span><span data-lang="tr">Tek bir npx komutuyla uzak ajanları bağlayın. Güvenlik duvarı dostu HTTP yoklama mimarisi.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon pink">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
           </div>
-          <h3><span data-lang="en">Project Management</span><span data-lang="tr">Proje Yonetimi</span></h3>
-          <p><span data-lang="en">Link tasks to projects and directories. Keep your work organized with project-based task grouping.</span><span data-lang="tr">Gorevleri projelere ve dizinlere baglayin. Proje tabanli gorev gruplama ile isinizi duzenli tutun.</span></p>
+          <h3><span data-lang="en">Project Management</span><span data-lang="tr">Proje Yönetimi</span></h3>
+          <p><span data-lang="en">Link tasks to projects and directories. Keep your work organized with project-based task grouping.</span><span data-lang="tr">Görevleri projelere ve dizinlere bağlayın. Proje tabanlı görev gruplama ile işinizi düzenli tutun.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon orange">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           </div>
-          <h3><span data-lang="en">Secure Vault</span><span data-lang="tr">Guvenli Kasa</span></h3>
-          <p><span data-lang="en">Store API keys and secrets with AES-256-GCM encryption. Vault key file with strict OS-level permissions.</span><span data-lang="tr">API anahtarlarini ve sirlari AES-256-GCM sifrelemesiyle saklayin. Siki isletim sistemi izinleriyle kasa dosyasi.</span></p>
+          <h3><span data-lang="en">Secure Vault</span><span data-lang="tr">Güvenli Kasa</span></h3>
+          <p><span data-lang="en">Store API keys and secrets with AES-256-GCM encryption. Vault key file with strict OS-level permissions.</span><span data-lang="tr">API anahtarlarını ve sırları AES-256-GCM şifrelemesiyle saklayın. Sıkı işletim sistemi izinleriyle kasa dosyası.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
@@ -923,15 +979,15 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
           </div>
           <h3><span data-lang="en">MCP & Git Integration</span><span data-lang="tr">MCP ve Git Entegrasyonu</span></h3>
-          <p><span data-lang="en">Configure MCP servers and Git settings per agent. Seamless integration with your development workflow.</span><span data-lang="tr">Ajan bazinda MCP sunuculari ve Git ayarlari yapilandirin. Gelistirme is akisinizla kesintisiz entegrasyon.</span></p>
+          <p><span data-lang="en">Configure MCP servers and Git settings per agent. Seamless integration with your development workflow.</span><span data-lang="tr">Ajan bazında MCP sunucuları ve Git ayarları yapılandırın. Geliştirme iş akışınızla kesintisiz entegrasyon.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           </div>
-          <h3><span data-lang="en">Dark & Light Theme</span><span data-lang="tr">Karanlik ve Aydinlik Tema</span></h3>
-          <p><span data-lang="en">Switch between dark and light themes. Centralized theme system with smooth transitions.</span><span data-lang="tr">Karanlik ve aydinlik temalar arasinda gecis yapin. Akici gecisli merkezi tema sistemi.</span></p>
+          <h3><span data-lang="en">Dark & Light Theme</span><span data-lang="tr">Karanlık ve Aydınlık Tema</span></h3>
+          <p><span data-lang="en">Switch between dark and light themes. Centralized theme system with smooth transitions.</span><span data-lang="tr">Karanlık ve aydınlık temalar arasında geçiş yapın. Akıcı geçişli merkezi tema sistemi.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
@@ -939,15 +995,15 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           </div>
           <h3><span data-lang="en">macOS Native Notifications</span><span data-lang="tr">macOS Yerel Bildirimleri</span></h3>
-          <p><span data-lang="en">Get notified when tasks complete, fail, or agents go offline. Native macOS notification integration.</span><span data-lang="tr">Gorevler tamamlandiginda, basarisiz oldugunda veya ajanlar cevrimdisi oldugunda bildirim alin.</span></p>
+          <p><span data-lang="en">Get notified when tasks complete, fail, or agents go offline. Native macOS notification integration.</span><span data-lang="tr">Görevler tamamlandığında, başarısız olduğunda veya ajanlar çevrimdışı olduğunda bildirim alın.</span></p>
         </div>
 
         <div class="feature-card animate-on-scroll">
           <div class="feature-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
-          <h3><span data-lang="en">Activity Log & Dashboard</span><span data-lang="tr">Aktivite Logu ve Pano</span></h3>
-          <p><span data-lang="en">Comprehensive dashboard with task filtering, search, agent health monitoring, and offline warnings.</span><span data-lang="tr">Gorev filtreleme, arama, ajan saglik izleme ve cevrimdisi uyarilari iceren kapsamli pano.</span></p>
+          <h3><span data-lang="en">Activity Log & Dashboard</span><span data-lang="tr">Aktivite Günlüğü ve Pano</span></h3>
+          <p><span data-lang="en">Comprehensive dashboard with task filtering, search, agent health monitoring, and offline warnings.</span><span data-lang="tr">Görev filtreleme, arama, ajan sağlık izleme ve çevrimdışı uyarıları içeren kapsamlı pano.</span></p>
         </div>
 
       </div>
@@ -958,27 +1014,27 @@
   <section class="how-section" id="how-it-works">
     <div class="container">
       <div class="section-header animate-on-scroll">
-        <span class="section-label"><span data-lang="en">How It Works</span><span data-lang="tr">Nasil Calisir</span></span>
+        <span class="section-label"><span data-lang="en">How It Works</span><span data-lang="tr">Nasıl Çalışır</span></span>
         <h2 class="section-title">
           <span data-lang="en">Three Steps to AI-Powered Development</span>
-          <span data-lang="tr">Yapay Zeka Destekli Gelistirme Icin Uc Adim</span>
+          <span data-lang="tr">Yapay Zekâ Destekli Geliştirme İçin Üç Adım</span>
         </h2>
       </div>
       <div class="steps">
         <div class="step animate-on-scroll">
           <div class="step-number">1</div>
-          <h3><span data-lang="en">Create Agents</span><span data-lang="tr">Ajan Olusturun</span></h3>
-          <p><span data-lang="en">Set up local or remote agents through the AIDesk UI. Configure project paths, MCP servers, and Git settings.</span><span data-lang="tr">AIDesk arayuzu uzerinden yerel veya uzak ajanlar olusturun. Proje yollarini, MCP sunucularini ve Git ayarlarini yapilandirin.</span></p>
+          <h3><span data-lang="en">Create Agents</span><span data-lang="tr">Ajan Oluşturun</span></h3>
+          <p><span data-lang="en">Set up local or remote agents through the AIDesk UI. Configure project paths, MCP servers, and Git settings.</span><span data-lang="tr">AIDesk arayüzü üzerinden yerel veya uzak ajanlar oluşturun. Proje yollarını, MCP sunucularını ve Git ayarlarını yapılandırın.</span></p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">2</div>
-          <h3><span data-lang="en">Assign Tasks</span><span data-lang="tr">Gorev Atayin</span></h3>
-          <p><span data-lang="en">Create tasks with priority levels and assign them to agents. The orchestrator automatically distributes queued tasks.</span><span data-lang="tr">Oncelik seviyeleriyle gorevler olusturun ve ajanlara atayin. Orkestrator kuyruklu gorevleri otomatik dagitir.</span></p>
+          <h3><span data-lang="en">Assign Tasks</span><span data-lang="tr">Görev Atayın</span></h3>
+          <p><span data-lang="en">Create tasks with priority levels and assign them to agents. The orchestrator automatically distributes queued tasks.</span><span data-lang="tr">Öncelik seviyeleriyle görevler oluşturun ve ajanlara atayın. Orkestratör kuyruktaki görevleri otomatik dağıtır.</span></p>
         </div>
         <div class="step animate-on-scroll">
           <div class="step-number">3</div>
-          <h3><span data-lang="en">Execute & Monitor</span><span data-lang="tr">Calistirin ve Izleyin</span></h3>
-          <p><span data-lang="en">Agents execute via Claude Code SDK with real-time SSE log streaming. Track progress and get native notifications.</span><span data-lang="tr">Ajanlar Claude Code SDK ile calisir, canli SSE log akisi saglar. Ilerlemeyi takip edin ve yerel bildirimler alin.</span></p>
+          <h3><span data-lang="en">Execute & Monitor</span><span data-lang="tr">Çalıştırın ve İzleyin</span></h3>
+          <p><span data-lang="en">Agents execute via Claude Code SDK with real-time SSE log streaming. Track progress and get native notifications.</span><span data-lang="tr">Ajanlar Claude Code SDK ile çalışır, canlı SSE log akışı sağlar. İlerlemeyi takip edin ve yerel bildirimler alın.</span></p>
         </div>
       </div>
     </div>
@@ -992,11 +1048,11 @@
           <span class="section-label"><span data-lang="en">Remote Agents</span><span data-lang="tr">Uzak Ajanlar</span></span>
           <h2>
             <span data-lang="en">Connect From Anywhere With a Single Command</span>
-            <span data-lang="tr">Tek Bir Komutla Her Yerden Baglanin</span>
+            <span data-lang="tr">Tek Bir Komutla Her Yerden Bağlanın</span>
           </h2>
           <p>
             <span data-lang="en">Run agents on any machine with the <code style="color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;font-size:0.95em">aidesk-agent</code> npm package. Agents poll the AIDesk server over HTTP, making it work through firewalls and NAT.</span>
-            <span data-lang="tr"><code style="color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;font-size:0.95em">aidesk-agent</code> npm paketi ile herhangi bir makinede ajan calistirin. Ajanlar AIDesk sunucusunu HTTP uzerinden yoklar, guvenlik duvarlari ve NAT arkasinda calisir.</span>
+            <span data-lang="tr"><code style="color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;font-size:0.95em">aidesk-agent</code> npm paketi ile herhangi bir makinede ajan çalıştırın. Ajanlar AIDesk sunucusunu HTTP üzerinden yoklar, güvenlik duvarları ve NAT arkasında çalışır.</span>
           </p>
           <ul class="remote-features">
             <li data-lang="en">
@@ -1005,7 +1061,7 @@
             </li>
             <li data-lang="tr">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-              Sifir yapilandirma - sadece token ve sunucu URL'si ayarlayin
+              Sıfır yapılandırma - sadece token ve sunucu URL'si ayarlayın
             </li>
             <li data-lang="en">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1013,7 +1069,7 @@
             </li>
             <li data-lang="tr">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-              Guvenlik duvari dostu HTTP yoklama mimarisi
+              Güvenlik duvarı dostu HTTP yoklama mimarisi
             </li>
             <li data-lang="en">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1021,7 +1077,7 @@
             </li>
             <li data-lang="tr">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-              60 saniye kalp atisi ile otomatik cevrimdisi tespiti
+              60 saniye kalp atışı ile otomatik çevrimdışı tespiti
             </li>
             <li data-lang="en">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1029,7 +1085,7 @@
             </li>
             <li data-lang="tr">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-              Guvenli token tabanli kimlik dogrulama
+              Güvenli token tabanlı kimlik doğrulama
             </li>
           </ul>
         </div>
@@ -1042,13 +1098,13 @@
               <span>Terminal</span>
             </div>
             <div class="code-body">
-              <div><span class="code-comment"># <span data-lang="en">Install and run the remote agent</span><span data-lang="tr">Uzak ajani yukleyin ve calistirin</span></span></div>
+              <div><span class="code-comment"># <span data-lang="en">Install and run the remote agent</span><span data-lang="tr">Uzak ajanı yükleyin ve çalıştırın</span></span></div>
               <br>
               <div><span class="code-prompt">$</span> <span class="code-var">AIDESK_TOKEN</span>=<span class="code-string">your-agent-token</span> \</div>
               <div>&nbsp;&nbsp;<span class="code-keyword">npx</span> <span class="code-string">aidesk-agent</span> \</div>
               <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-flag">--server</span> <span class="code-string">https://your-server:3939</span></div>
               <br>
-              <div><span class="code-comment"># <span data-lang="en">Or install globally</span><span data-lang="tr">Veya global olarak yukleyin</span></span></div>
+              <div><span class="code-comment"># <span data-lang="en">Or install globally</span><span data-lang="tr">Veya global olarak yükleyin</span></span></div>
               <div><span class="code-prompt">$</span> <span class="code-keyword">npm</span> install <span class="code-flag">-g</span> <span class="code-string">aidesk-agent</span></div>
               <div><span class="code-prompt">$</span> <span class="code-keyword">aidesk-agent</span> <span class="code-flag">--server</span> <span class="code-string">https://your-server:3939</span></div>
             </div>
@@ -1062,37 +1118,37 @@
   <section class="tech-section" id="tech">
     <div class="container">
       <div class="section-header animate-on-scroll">
-        <span class="section-label"><span data-lang="en">Tech Stack</span><span data-lang="tr">Teknoloji Yigini</span></span>
+        <span class="section-label"><span data-lang="en">Tech Stack</span><span data-lang="tr">Teknoloji Yığını</span></span>
         <h2 class="section-title">
           <span data-lang="en">Built With Modern Technologies</span>
-          <span data-lang="tr">Modern Teknolojilerle Insa Edildi</span>
+          <span data-lang="tr">Modern Teknolojilerle İnşa Edildi</span>
         </h2>
       </div>
       <div class="tech-grid">
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#129408;</span>
           <h3>Rust</h3>
-          <p><span data-lang="en">Backend & Security</span><span data-lang="tr">Arka Uc ve Guvenlik</span></p>
+          <p><span data-lang="en">Backend & Security</span><span data-lang="tr">Arka Uç ve Güvenlik</span></p>
         </div>
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#9881;&#65039;</span>
           <h3>Tauri v2</h3>
-          <p><span data-lang="en">Native Desktop</span><span data-lang="tr">Yerel Masaustu</span></p>
+          <p><span data-lang="en">Native Desktop</span><span data-lang="tr">Yerel Masaüstü</span></p>
         </div>
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#9883;</span>
           <h3>React 19</h3>
-          <p><span data-lang="en">UI Framework</span><span data-lang="tr">Arayuz Cercevesi</span></p>
+          <p><span data-lang="en">UI Framework</span><span data-lang="tr">Arayüz Çerçevesi</span></p>
         </div>
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#128451;</span>
           <h3>SQLite</h3>
-          <p><span data-lang="en">WAL Mode Database</span><span data-lang="tr">WAL Mod Veritabani</span></p>
+          <p><span data-lang="en">WAL Mode Database</span><span data-lang="tr">WAL Mod Veritabanı</span></p>
         </div>
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#129302;</span>
           <h3>Claude SDK</h3>
-          <p><span data-lang="en">Agent Execution</span><span data-lang="tr">Ajan Calistirma</span></p>
+          <p><span data-lang="en">Agent Execution</span><span data-lang="tr">Ajan Çalıştırma</span></p>
         </div>
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#127912;</span>
@@ -1107,7 +1163,7 @@
         <div class="tech-card animate-on-scroll">
           <span class="tech-card-icon">&#128272;</span>
           <h3>AES-256-GCM</h3>
-          <p><span data-lang="en">Encryption</span><span data-lang="tr">Sifreleme</span></p>
+          <p><span data-lang="en">Encryption</span><span data-lang="tr">Şifreleme</span></p>
         </div>
       </div>
     </div>
@@ -1117,14 +1173,14 @@
   <section class="quickstart-section" id="quickstart">
     <div class="container">
       <div class="section-header animate-on-scroll">
-        <span class="section-label"><span data-lang="en">Quick Start</span><span data-lang="tr">Hizli Baslangic</span></span>
+        <span class="section-label"><span data-lang="en">Quick Start</span><span data-lang="tr">Hızlı Başlangıç</span></span>
         <h2 class="section-title">
           <span data-lang="en">Get Up and Running in Minutes</span>
-          <span data-lang="tr">Dakikalar Icinde Baslayin</span>
+          <span data-lang="tr">Dakikalar İçinde Başlayın</span>
         </h2>
         <p class="section-desc">
           <span data-lang="en">Clone, build, and launch AIDesk with just a few commands.</span>
-          <span data-lang="tr">Sadece birkacc komutla AIDesk'i klonlayin, derleyin ve baslatmin.</span>
+          <span data-lang="tr">Sadece birkaç komutla AIDesk'i klonlayın, derleyin ve başlatın.</span>
         </p>
       </div>
       <div class="quickstart-window animate-on-scroll">
@@ -1135,17 +1191,17 @@
           <span>Terminal</span>
         </div>
         <div class="quickstart-body">
-          <span class="line"><span class="code-comment"># <span data-lang="en">Clone the repository</span><span data-lang="tr">Depoyu klonlayin</span></span></span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Clone the repository</span><span data-lang="tr">Depoyu klonlayın</span></span></span>
           <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">git</span> clone <span class="code-string">https://github.com/unkownpr/AIDesk.git</span></span>
           <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cd</span> <span class="code-string">AIDesk</span></span>
           <span class="line">&nbsp;</span>
-          <span class="line"><span class="code-comment"># <span data-lang="en">Install frontend dependencies</span><span data-lang="tr">On yuz bagimliklarini yukleyin</span></span></span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Install frontend dependencies</span><span data-lang="tr">Ön yüz bağımlılıklarını yükleyin</span></span></span>
           <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">pnpm</span> install</span>
           <span class="line">&nbsp;</span>
-          <span class="line"><span class="code-comment"># <span data-lang="en">Build the agent runner sidecar</span><span data-lang="tr">Ajan calistirici sidecar'i derleyin</span></span></span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Build the agent runner sidecar</span><span data-lang="tr">Ajan çalıştırıcı sidecar'ı derleyin</span></span></span>
           <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cd</span> <span class="code-string">agent-runner</span> && <span class="code-keyword">npm</span> install && <span class="code-keyword">npm</span> run build && <span class="code-keyword">cd</span> ..</span>
           <span class="line">&nbsp;</span>
-          <span class="line"><span class="code-comment"># <span data-lang="en">Launch in development mode</span><span data-lang="tr">Gelistirme modunda baslatim</span></span></span>
+          <span class="line"><span class="code-comment"># <span data-lang="en">Launch in development mode</span><span data-lang="tr">Geliştirme modunda başlatın</span></span></span>
           <span class="line"><span class="code-prompt">$</span> <span class="code-keyword">cargo</span> tauri dev</span>
         </div>
       </div>
@@ -1177,7 +1233,7 @@
       </div>
       <div class="footer-bottom">
         <span data-lang="en">Built with care by</span>
-        <span data-lang="tr">Ozenle yapildi:</span>
+        <span data-lang="tr">Özenle yapıldı:</span>
         <a href="https://ssilistre.dev" target="_blank" rel="noopener">ssilistre.dev</a>
       </div>
     </div>
