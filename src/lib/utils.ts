@@ -38,9 +38,9 @@ export const statusColors: Record<TaskStatus | AgentStatus, string> = {
   running: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
   completed: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   failed: "bg-red-500/10 text-red-400 border-red-500/20",
-  cancelled: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
+  cancelled: "bg-gray-500/10 text-gray-400 border-gray-500/20",
   online: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  offline: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
+  offline: "bg-gray-500/10 text-gray-400 border-gray-500/20",
   busy: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
   idle: "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
@@ -49,5 +49,5 @@ export const priorityColors: Record<Priority, string> = {
   critical: "text-red-400",
   high: "text-amber-400",
   medium: "text-blue-400",
-  low: "text-zinc-400",
+  low: "text-gray-400",
 };

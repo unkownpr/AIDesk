@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use super::models::*;
 use super::Database;
 use rusqlite::{params, Result as SqlResult};
@@ -276,14 +278,14 @@ impl Database {
     }
 
     /// Count running tasks per agent (for load balancing)
-    pub fn count_running_tasks_per_agent(&self) -> SqlResult<std::collections::HashMap<String, i64>> {
+    pub fn count_running_tasks_per_agent(&self) -> SqlResult<HashMap<String, i64>> {
         let conn = self.conn();
         let mut stmt = conn.prepare(
             "SELECT assigned_agent_id, COUNT(*) FROM tasks
              WHERE status IN ('assigned', 'running') AND assigned_agent_id IS NOT NULL
              GROUP BY assigned_agent_id",
         )?;
-        let mut map = std::collections::HashMap::new();
+        let mut map = HashMap::new();
         let rows = stmt.query_map([], |row| {
             Ok((row.get::<_, String>(0)?, row.get::<_, i64>(1)?))
         })?;
@@ -624,7 +626,7 @@ impl Database {
     }
 
     /// Get queue info: pending count and map of task_id -> position
-    pub fn get_queue_info(&self) -> SqlResult<std::collections::HashMap<String, i64>> {
+    pub fn get_queue_info(&self) -> SqlResult<HashMap<String, i64>> {
         let conn = self.conn();
         let mut stmt = conn.prepare(
             "SELECT id FROM tasks WHERE status = 'pending'
@@ -632,7 +634,7 @@ impl Database {
                 CASE priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END,
                 created_at ASC",
         )?;
-        let mut map = std::collections::HashMap::new();
+        let mut map = HashMap::new();
         let rows = stmt.query_map([], |row| row.get::<_, String>(0))?;
         for (i, row) in rows.enumerate() {
             if let Ok(id) = row {
@@ -657,7 +659,7 @@ impl Database {
     pub fn get_project(&self, id: &str) -> SqlResult<Project> {
         let conn = self.conn();
         conn.query_row(
-            "SELECT id, name, path, description, git_repo, git_branch, created_at, updated_at FROM projects WHERE id = ?1",
+            "SELECT id, name, path, description, git_repo, git_branch, analysis, analysis_updated_at, created_at, updated_at FROM projects WHERE id = ?1",
             params![id],
             |row| Ok(Project {
                 id: row.get(0)?,
@@ -666,8 +668,10 @@ impl Database {
                 description: row.get(3)?,
                 git_repo: row.get(4)?,
                 git_branch: row.get(5)?,
-                created_at: row.get(6)?,
-                updated_at: row.get(7)?,
+                analysis: row.get(6)?,
+                analysis_updated_at: row.get(7)?,
+                created_at: row.get(8)?,
+                updated_at: row.get(9)?,
             }),
         )
     }
@@ -675,7 +679,7 @@ impl Database {
     pub fn list_projects(&self) -> SqlResult<Vec<Project>> {
         let conn = self.conn();
         let mut stmt = conn.prepare(
-            "SELECT id, name, path, description, git_repo, git_branch, created_at, updated_at FROM projects ORDER BY name ASC",
+            "SELECT id, name, path, description, git_repo, git_branch, analysis, analysis_updated_at, created_at, updated_at FROM projects ORDER BY name ASC",
         )?;
         let result = stmt.query_map([], |row| Ok(Project {
             id: row.get(0)?,
@@ -684,8 +688,10 @@ impl Database {
             description: row.get(3)?,
             git_repo: row.get(4)?,
             git_branch: row.get(5)?,
-            created_at: row.get(6)?,
-            updated_at: row.get(7)?,
+            analysis: row.get(6)?,
+            analysis_updated_at: row.get(7)?,
+            created_at: row.get(8)?,
+            updated_at: row.get(9)?,
         }))?.collect::<SqlResult<Vec<_>>>();
         result
     }
@@ -708,10 +714,30 @@ impl Database {
         self.get_project(id)
     }
 
+    pub fn update_project_analysis(&self, id: &str, analysis: &str) -> SqlResult<()> {
+        let conn = self.conn();
+        conn.execute(
+            "UPDATE projects SET analysis = ?1, analysis_updated_at = datetime('now'), updated_at = datetime('now') WHERE id = ?2",
+            params![analysis, id],
+        )?;
+        Ok(())
+    }
+
     pub fn delete_project(&self, id: &str) -> SqlResult<()> {
         let conn = self.conn();
         conn.execute("DELETE FROM projects WHERE id = ?1", params![id])?;
         Ok(())
+    }
+
+    /// List tasks for a specific project
+    pub fn list_tasks_by_project(&self, project_id: &str) -> SqlResult<Vec<Task>> {
+        let conn = self.conn();
+        let mut stmt = conn.prepare(
+            &format!("SELECT {TASK_COLUMNS} FROM tasks WHERE project_id = ?1 ORDER BY created_at DESC"),
+        )?;
+        let result = stmt.query_map(params![project_id], row_to_task)?
+            .collect::<SqlResult<Vec<_>>>();
+        result
     }
 
     // === Activity Logs ===
@@ -758,6 +784,33 @@ impl Database {
             })
         })?.collect::<SqlResult<Vec<_>>>();
         result
+    }
+
+    /// Count tasks per project: returns HashMap<project_id, (active_count, total_count)>
+    /// Active means status IN ('pending', 'assigned', 'running').
+    pub fn count_tasks_per_project(&self) -> SqlResult<HashMap<String, (i64, i64)>> {
+        let conn = self.conn();
+        let mut stmt = conn.prepare(
+            "SELECT project_id,
+                    SUM(CASE WHEN status IN ('pending', 'assigned', 'running') THEN 1 ELSE 0 END),
+                    COUNT(*)
+             FROM tasks
+             WHERE project_id IS NOT NULL
+             GROUP BY project_id",
+        )?;
+        let mut map = HashMap::new();
+        let rows = stmt.query_map([], |row| {
+            Ok((
+                row.get::<_, String>(0)?,
+                row.get::<_, i64>(1)?,
+                row.get::<_, i64>(2)?,
+            ))
+        })?;
+        for row in rows {
+            let (project_id, active, total) = row?;
+            map.insert(project_id, (active, total));
+        }
+        Ok(map)
     }
 
     pub fn count_activity_logs(&self, entity_type: Option<&str>) -> SqlResult<i64> {

@@ -264,6 +264,8 @@ pub struct Project {
     pub description: Option<String>,
     pub git_repo: Option<String>,
     pub git_branch: Option<String>,
+    pub analysis: Option<String>,
+    pub analysis_updated_at: Option<String>,
     pub created_at: String,
     pub updated_at: String,
 }

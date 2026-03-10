@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { Agent, Task, TaskLog, ClaudeStatus, Secret, McpConfig, GitConfig, Project, QueueInfo, ActivityLogResponse } from "./types";
+import type { Agent, Task, TaskLog, ClaudeStatus, Secret, McpConfig, GitConfig, Project, QueueInfo, ActivityLogResponse, SystemInfo } from "./types";
 
 // Agent commands
 export const listAgents = () => invoke<Agent[]>("list_agents");
@@ -148,6 +148,8 @@ export const updateProject = (params: {
   gitBranch: params.git_branch,
 });
 export const deleteProject = (id: string) => invoke<void>("delete_project", { id });
+export const getProject = (id: string) => invoke<Project>("get_project", { id });
+export const listTasksByProject = (projectId: string) => invoke<Task[]>("list_tasks_by_project", { projectId });
 
 // Activity logs
 export const listActivityLogs = (params?: {
@@ -166,6 +168,7 @@ export const triggerOrchestrator = () => invoke<void>("trigger_orchestrator");
 // System
 export const checkClaudeStatus = () => invoke<ClaudeStatus>("check_claude_status");
 export const getDashboardKey = () => invoke<string>("get_dashboard_key");
+export const getSystemInfo = () => invoke<SystemInfo>("get_system_info");
 
 // Dialog - pick a directory
 export const pickDirectory = async (): Promise<string | null> => {

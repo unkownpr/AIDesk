@@ -57,18 +57,18 @@ export function ActivityPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 max-w-6xl">
       <div className="flex items-center justify-between">
-        <h1 className={`text-lg font-semibold ${s.heading}`}>Activity Log</h1>
-        <span className={`text-[12px] ${s.muted}`}>{data.total} events</span>
+        <h1 className={`text-xl font-semibold ${s.heading}`}>Activity Log</h1>
+        <span className={`text-[13px] ${s.muted}`}>{data.total} events</span>
       </div>
 
       {/* Filter */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <select
           value={filterEntity}
           onChange={(e) => handleFilterChange(e.target.value)}
-          className={`rounded-md border px-2.5 py-1.5 text-[13px] ${s.input}`}
+          className={`rounded-xl border px-3 py-2 text-[14px] ${s.input}`}
         >
           <option value="all">All Types</option>
           <option value="task">Tasks</option>
@@ -84,34 +84,35 @@ export function ActivityPage() {
       {/* Log List */}
       {loading && data.logs.length === 0 ? (
         <div className="flex h-48 items-center justify-center">
-          <Loader2 size={20} className={`animate-spin ${s.spinner}`} />
+          <Loader2 size={22} className={`animate-spin ${s.spinner}`} />
         </div>
       ) : data.logs.length === 0 ? (
-        <div className={`flex flex-col items-center justify-center rounded-lg border py-16 ${s.card} ${s.muted}`}>
-          <p className="text-sm">No activity yet</p>
+        <div className={`flex flex-col items-center justify-center rounded-2xl border py-20 ${s.card} ${s.muted}`}>
+          <p className="text-[15px] mb-1">No activity yet</p>
+          <p className={`text-[13px] ${s.muted}`}>Events will appear here as you use the app</p>
         </div>
       ) : (
-        <div className={`rounded-lg border overflow-hidden ${s.card}`}>
-          <div className="divide-y divide-zinc-800/40">
+        <div className={`rounded-2xl border overflow-hidden ${s.card}`}>
+          <div className={`divide-y ${isDark ? "divide-[#2d2d3c]/40" : "divide-gray-100"}`}>
             {data.logs.map((log) => {
               const Icon = entityIcons[log.entity_type] || Monitor;
               const actionColor = actionColors[log.action] || s.label;
               return (
-                <div key={log.id} className={`flex items-center gap-3 px-4 py-2.5 ${s.hover}`}>
-                  <Icon size={14} className={s.muted} />
+                <div key={log.id} className={`flex items-center gap-3.5 px-5 py-3 ${s.hover}`}>
+                  <Icon size={15} className={s.muted} />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[13px] font-medium ${actionColor}`}>{log.action}</span>
-                      <span className={`text-[12px] ${s.label}`}>{log.entity_type}</span>
+                    <div className="flex items-center gap-2.5">
+                      <span className={`text-[14px] font-medium ${actionColor}`}>{log.action}</span>
+                      <span className={`text-[13px] ${s.label}`}>{log.entity_type}</span>
                       {log.entity_name && (
-                        <span className={`text-[13px] truncate ${s.textSecondary}`}>{log.entity_name}</span>
+                        <span className={`text-[14px] truncate ${s.textSecondary}`}>{log.entity_name}</span>
                       )}
                     </div>
                     {log.details && (
-                      <p className={`text-[11px] ${s.muted} truncate mt-0.5`}>{log.details}</p>
+                      <p className={`text-[13px] ${s.muted} truncate mt-0.5`}>{log.details}</p>
                     )}
                   </div>
-                  <span className={`text-[11px] ${s.muted} whitespace-nowrap shrink-0`}>
+                  <span className={`text-[12px] ${s.muted} whitespace-nowrap shrink-0`}>
                     {formatDate(log.created_at)}
                   </span>
                 </div>
@@ -123,25 +124,25 @@ export function ActivityPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-4">
           <button
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
-            className={`p-1.5 rounded-md transition-colors disabled:opacity-30 ${s.hover}`}
+            className={`p-2 rounded-xl transition-all duration-150 disabled:opacity-30 ${s.hover}`}
             aria-label="Previous page"
           >
-            <ChevronLeft size={16} className={s.label} />
+            <ChevronLeft size={18} className={s.label} />
           </button>
-          <span className={`text-[12px] ${s.muted}`}>
+          <span className={`text-[13px] ${s.muted}`}>
             {page + 1} / {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={page >= totalPages - 1}
-            className={`p-1.5 rounded-md transition-colors disabled:opacity-30 ${s.hover}`}
+            className={`p-2 rounded-xl transition-all duration-150 disabled:opacity-30 ${s.hover}`}
             aria-label="Next page"
           >
-            <ChevronRight size={16} className={s.label} />
+            <ChevronRight size={18} className={s.label} />
           </button>
         </div>
       )}

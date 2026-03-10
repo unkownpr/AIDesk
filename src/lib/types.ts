@@ -96,6 +96,8 @@ export interface Project {
   description: string | null;
   git_repo: string | null;
   git_branch: string | null;
+  analysis: string | null;
+  analysis_updated_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -118,6 +120,11 @@ export interface ActivityLog {
 export interface ActivityLogResponse {
   logs: ActivityLog[];
   total: number;
+}
+
+export interface SystemInfo {
+  hostname: string;
+  local_ip: string;
 }
 
 export interface GitConfig {

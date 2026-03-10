@@ -4,41 +4,45 @@
 
 :root {
   /* Dark theme (default) */
-  --bg-primary: #09090b;
-  --bg-secondary: #18181b;
-  --bg-tertiary: #27272a;
-  --bg-card: rgba(24, 24, 27, 0.4);
-  --border-primary: rgba(39, 39, 42, 0.8);
-  --border-secondary: rgba(39, 39, 42, 0.6);
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-tertiary: #71717a;
-  --text-muted: #52525b;
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #14141b;
+  --bg-tertiary: #1e1e28;
+  --bg-card: rgba(20, 20, 27, 0.6);
+  --border-primary: rgba(45, 45, 60, 0.6);
+  --border-secondary: rgba(45, 45, 60, 0.4);
+  --text-primary: #f0f0f5;
+  --text-secondary: #a8a8b8;
+  --text-tertiary: #6e6e82;
+  --text-muted: #4a4a5e;
   --accent: #10b981;
-  --accent-hover: #059669;
-  --accent-bg: rgba(16, 185, 129, 0.1);
-  --accent-border: rgba(16, 185, 129, 0.2);
-  --scrollbar: #27272a;
-  --scrollbar-hover: #3f3f46;
+  --accent-hover: #34d399;
+  --accent-bg: rgba(16, 185, 129, 0.08);
+  --accent-border: rgba(16, 185, 129, 0.15);
+  --scrollbar: #1e1e28;
+  --scrollbar-hover: #2e2e3a;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 html.light {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f4f4f5;
-  --bg-tertiary: #e4e4e7;
-  --bg-card: rgba(244, 244, 245, 0.6);
-  --border-primary: rgba(228, 228, 231, 0.9);
-  --border-secondary: rgba(228, 228, 231, 0.7);
-  --text-primary: #09090b;
-  --text-secondary: #52525b;
-  --text-tertiary: #71717a;
-  --text-muted: #a1a1aa;
+  --bg-primary: #fafafa;
+  --bg-secondary: #f3f4f6;
+  --bg-tertiary: #e5e7eb;
+  --bg-card: #ffffff;
+  --border-primary: rgba(209, 213, 219, 0.8);
+  --border-secondary: rgba(209, 213, 219, 0.5);
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-muted: #9ca3af;
   --accent: #059669;
   --accent-hover: #047857;
-  --accent-bg: rgba(5, 150, 105, 0.08);
-  --accent-border: rgba(5, 150, 105, 0.2);
-  --scrollbar: #d4d4d8;
-  --scrollbar-hover: #a1a1aa;
+  --accent-bg: rgba(5, 150, 105, 0.06);
+  --accent-border: rgba(5, 150, 105, 0.15);
+  --scrollbar: #d1d5db;
+  --scrollbar-hover: #9ca3af;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 /* === Base === */
@@ -50,22 +54,53 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg-primary);
   color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* === Smooth transitions for theme switching === */
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Opt-out for elements that need instant response */
+button:active, input:focus, textarea:focus, select:focus,
+[data-no-transition] {
+  transition-duration: 0ms;
 }
 
 /* === Scrollbar === */
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar);
-  border-radius: 2px;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-hover);
+}
+
+/* === Focus rings === */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* === Selection === */
+
+::selection {
+  background: rgba(16, 185, 129, 0.25);
+  color: inherit;
 }
 
 /* === Theme utility classes === */

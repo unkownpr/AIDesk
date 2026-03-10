@@ -181,12 +181,29 @@ impl Orchestrator {
         let task_id = task.id.clone();
         let task_title = task.title.clone();
         let agent_id = agent.id.clone();
-        let description = task.description.clone();
-        // Use project path as working dir if task has a project, fallback to agent's dir
-        let working_dir = task.project_id.as_ref()
-            .and_then(|pid| db.get_project(pid).ok())
-            .map(|p| p.path)
+        // Use project path as working dir, fallback to agent's dir
+        let project = task.project_id.as_ref()
+            .and_then(|pid| db.get_project(pid).ok());
+        let working_dir = project.as_ref()
+            .map(|p| p.path.clone())
             .or_else(|| agent.working_directory.clone());
+        // Build description with project analysis context
+        let description = if let Some(ref proj) = project {
+            let mut desc = task.description.clone();
+            if let Some(ref analysis) = proj.analysis {
+                desc = format!(
+                    "<project_analysis>\nThis is the existing project analysis. Use it as context, do not re-analyze the entire project.\n{}\n</project_analysis>\n\n{}", analysis, desc
+                );
+            } else {
+                desc = format!(
+                    "<project_context>\nProject: {} ({})\nThis is the first task for this project. Before starting the task, briefly analyze the project structure (key files, tech stack, architecture). Then proceed with the task.\n</project_context>\n\n{}", proj.name, proj.path, desc
+                );
+            }
+            desc
+        } else {
+            task.description.clone()
+        };
+        let project_id_for_analysis = task.project_id.clone();
         let model = Some(agent.model.clone());
         let max_turns = Some(agent.max_turns);
         let app_handle = self.app_handle.clone();
@@ -242,6 +259,12 @@ impl Orchestrator {
                     )
                     .ok();
                     db.add_activity("completed", "task", Some(&task_id), Some(&task_title), None).ok();
+
+                    // Update project analysis after task completion
+                    if let Some(ref pid) = project_id_for_analysis {
+                        Self::update_analysis_after_task(&db, pid, &task_id, &agent_id, &output);
+                    }
+
                     if let Some(ref handle) = app_handle {
                         let _ = handle.emit("task-notification", TaskNotification {
                             task_id: task_id.clone(),
@@ -292,6 +315,31 @@ impl Orchestrator {
             // Defuse the guard — we handled cleanup manually
             std::mem::forget(_guard);
         });
+    }
+}
+
+impl Orchestrator {
+    /// Extract a brief project analysis summary from task output
+    fn update_analysis_after_task(
+        db: &Arc<Database>,
+        project_id: &str,
+        task_id: &str,
+        agent_id: &str,
+        task_output: &str,
+    ) {
+        // Take last 2000 chars of output as analysis context
+        let analysis = if task_output.len() > 2000 {
+            &task_output[task_output.len() - 2000..]
+        } else {
+            task_output
+        };
+
+        if let Err(e) = db.update_project_analysis(project_id, analysis) {
+            tracing::warn!("Failed to update project analysis for {}: {}", project_id, e);
+        } else {
+            db.add_task_log(task_id, Some(agent_id), "info", "Project analysis updated", None).ok();
+            tracing::info!("Updated project analysis for {}", project_id);
+        }
     }
 }
 

@@ -126,6 +126,8 @@ impl Database {
                 description TEXT,
                 git_repo TEXT,
                 git_branch TEXT DEFAULT 'main',
+                analysis TEXT,
+                analysis_updated_at TEXT,
                 created_at TEXT NOT NULL DEFAULT (datetime('now')),
                 updated_at TEXT NOT NULL DEFAULT (datetime('now'))
             );
@@ -216,6 +218,24 @@ impl Database {
                 "ALTER TABLE agents ADD COLUMN max_concurrent_tasks INTEGER NOT NULL DEFAULT 1;",
             )?;
             tracing::info!("Schema upgrade: added max_concurrent_tasks to agents");
+        }
+
+        // v0.5: Add analysis columns to projects
+        let has_analysis_col: bool = conn
+            .query_row(
+                "SELECT sql FROM sqlite_master WHERE type='table' AND name='projects'",
+                [],
+                |row| row.get::<_, String>(0),
+            )
+            .map(|sql| sql.contains("analysis"))
+            .unwrap_or(false);
+
+        if !has_analysis_col {
+            conn.execute_batch(
+                "ALTER TABLE projects ADD COLUMN analysis TEXT;
+                 ALTER TABLE projects ADD COLUMN analysis_updated_at TEXT;",
+            )?;
+            tracing::info!("Schema upgrade: added analysis columns to projects");
         }
 
         if has_old_constraint {

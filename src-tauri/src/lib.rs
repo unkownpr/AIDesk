@@ -144,19 +144,6 @@ async fn create_agent(
 ) -> Result<AgentWithToken, String> {
     let agent_type_str = agent_type.as_deref().unwrap_or("local");
 
-    if agent_type_str == "local" {
-        match &working_directory {
-            None => return Err("Local agents require a working directory".to_string()),
-            Some(dir) if dir.trim().is_empty() => {
-                return Err("Local agents require a working directory".to_string())
-            }
-            Some(dir) if !std::path::Path::new(dir).is_dir() => {
-                return Err(format!("Directory does not exist: {}", dir))
-            }
-            _ => {}
-        }
-    }
-
     let req = CreateAgentRequest {
         name,
         agent_type: Some(agent_type_str.to_string()),
@@ -452,6 +439,37 @@ async fn delete_project(state: tauri::State<'_, AppState>, id: String) -> Result
     Ok(())
 }
 
+#[tauri::command]
+async fn get_project(state: tauri::State<'_, AppState>, id: String) -> Result<Project, String> {
+    state.db.get_project(&id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn list_tasks_by_project(state: tauri::State<'_, AppState>, project_id: String) -> Result<Vec<Task>, String> {
+    state.db.list_tasks_by_project(&project_id).map_err(|e| e.to_string())
+}
+
+// === Project Stats Commands ===
+
+#[derive(serde::Serialize)]
+struct ProjectTaskStats {
+    active_count: i64,
+    total_count: i64,
+}
+
+#[tauri::command]
+async fn get_project_stats(
+    state: tauri::State<'_, AppState>,
+) -> Result<std::collections::HashMap<String, ProjectTaskStats>, String> {
+    let raw = state.db.count_tasks_per_project().map_err(|e| e.to_string())?;
+    Ok(raw
+        .into_iter()
+        .map(|(id, (active, total))| {
+            (id, ProjectTaskStats { active_count: active, total_count: total })
+        })
+        .collect())
+}
+
 // === Activity Log Commands ===
 
 #[tauri::command]
@@ -555,6 +573,27 @@ async fn check_claude_status() -> Result<ClaudeStatus, String> {
     })
 }
 
+#[derive(serde::Serialize)]
+struct SystemInfo {
+    hostname: String,
+    local_ip: String,
+}
+
+#[tauri::command]
+fn get_system_info() -> SystemInfo {
+    let hostname = hostname::get()
+        .ok()
+        .and_then(|h| h.into_string().ok())
+        .unwrap_or_else(|| "localhost".to_string());
+
+    // Find the first non-loopback IPv4 address
+    let local_ip = local_ip_address::local_ip()
+        .map(|ip| ip.to_string())
+        .unwrap_or_else(|_| "localhost".to_string());
+
+    SystemInfo { hostname, local_ip }
+}
+
 // === App Entry Point ===
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -578,7 +617,7 @@ pub fn run() {
             let about_metadata = AboutMetadataBuilder::new()
                 .name(Some("AIDesk".to_string()))
                 .version(Some("0.1.0".to_string()))
-                .copyright(Some("© 2025 ssilistre.dev".to_string()))
+                .copyright(Some("© 2026 ssilistre.dev".to_string()))
                 .authors(Some(vec!["ssilistre.dev".to_string()]))
                 .comments(Some("AI agent'larınızı tek panelden yönetin.\nGörev atayın, logları izleyin, MCP ve Git entegrasyonlarını yapılandırın.".to_string()))
                 .website(Some("https://ssilistre.dev".to_string()))
@@ -702,15 +741,19 @@ pub fn run() {
             get_queue_info,
             // Projects
             list_projects,
+            get_project,
             create_project,
             update_project,
             delete_project,
+            list_tasks_by_project,
+            get_project_stats,
             // Activity
             list_activity_logs,
             // System
             trigger_orchestrator,
             check_claude_status,
             get_dashboard_key,
+            get_system_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running AIDesk");

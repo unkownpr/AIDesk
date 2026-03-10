@@ -10,28 +10,29 @@ import { useTheme } from "@/hooks/useTheme";
 import { useNotifications } from "@/hooks/useNotifications";
 import type { Page } from "@/lib/types";
 
-const pages: Record<Page, React.FC> = {
-  dashboard: DashboardPage,
-  tasks: TasksPage,
-  agents: AgentsPage,
-  projects: ProjectsPage,
-  activity: ActivityPage,
-  settings: SettingsPage,
-};
-
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>("dashboard");
   const { theme } = useTheme();
   useNotifications();
-  const PageComponent = pages[currentPage];
 
   const isDark = theme === "dark";
 
+  const renderPage = () => {
+    switch (currentPage) {
+      case "dashboard": return <DashboardPage onNavigate={setCurrentPage} />;
+      case "tasks": return <TasksPage />;
+      case "agents": return <AgentsPage />;
+      case "projects": return <ProjectsPage />;
+      case "activity": return <ActivityPage />;
+      case "settings": return <SettingsPage />;
+    }
+  };
+
   return (
-    <div className={`flex h-screen ${isDark ? "bg-zinc-950 text-zinc-200" : "bg-white text-zinc-900"}`}>
+    <div className={`flex h-screen ${isDark ? "bg-[#0a0a0f] text-gray-200" : "bg-white text-gray-900"}`}>
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
-      <main className={`flex-1 overflow-auto p-6 ${isDark ? "" : "bg-zinc-50"}`} aria-label="Page content">
-        <PageComponent />
+      <main className={`flex-1 overflow-auto p-8 ${isDark ? "" : "bg-gray-50"}`} aria-label="Page content">
+        {renderPage()}
       </main>
     </div>
   );
