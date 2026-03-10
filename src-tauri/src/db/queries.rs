@@ -338,9 +338,9 @@ impl Database {
 
     /// Get logs newer than the given log ID (for SSE streaming)
     pub fn get_task_logs_after(&self, task_id: &str, after_id: Option<&str>) -> SqlResult<Vec<TaskLog>> {
-        let conn = self.conn();
         match after_id {
             Some(aid) => {
+                let conn = self.conn();
                 let mut stmt = conn.prepare(
                     "SELECT id, task_id, agent_id, log_type, message, metadata, created_at
                      FROM task_logs
@@ -367,7 +367,6 @@ impl Database {
     // === Agent Update ===
 
     pub fn update_agent(&self, id: &str, req: &UpdateAgentRequest) -> SqlResult<Agent> {
-        let conn = self.conn();
         let agent = self.get_agent(id)?;
 
         let name = req.name.as_deref().unwrap_or(&agent.name);
@@ -376,10 +375,12 @@ impl Database {
         let max_turns = req.max_turns.unwrap_or(agent.max_turns);
         let max_concurrent = req.max_concurrent_tasks.unwrap_or(agent.max_concurrent_tasks);
 
+        let conn = self.conn();
         conn.execute(
             "UPDATE agents SET name = ?1, working_directory = ?2, model = ?3, max_turns = ?4, max_concurrent_tasks = ?5, updated_at = datetime('now') WHERE id = ?6",
             params![name, working_directory, model, max_turns, max_concurrent, id],
         )?;
+        drop(conn);
 
         self.get_agent(id)
     }
@@ -387,7 +388,6 @@ impl Database {
     // === Task Update ===
 
     pub fn update_task(&self, id: &str, req: &UpdateTaskRequest) -> SqlResult<Task> {
-        let conn = self.conn();
         let task = self.get_task(id)?;
 
         // Only allow updates on pending tasks
@@ -399,10 +399,12 @@ impl Database {
         let description = req.description.as_deref().unwrap_or(&task.description);
         let priority = req.priority.as_deref().unwrap_or(&task.priority);
 
+        let conn = self.conn();
         conn.execute(
             "UPDATE tasks SET title = ?1, description = ?2, priority = ?3, updated_at = datetime('now') WHERE id = ?4 AND status = 'pending'",
             params![title, description, priority, id],
         )?;
+        drop(conn);
 
         self.get_task(id)
     }
@@ -419,12 +421,13 @@ impl Database {
     // === Secrets ===
 
     pub fn create_secret(&self, name: &str, encrypted_value: &str, category: &str) -> SqlResult<Secret> {
-        let conn = self.conn();
         let id = Uuid::new_v4().to_string();
+        let conn = self.conn();
         conn.execute(
             "INSERT INTO secrets (id, name, encrypted_value, category) VALUES (?1, ?2, ?3, ?4)",
             params![id, name, encrypted_value, category],
         )?;
+        drop(conn);
         self.get_secret(&id)
     }
 
@@ -478,12 +481,13 @@ impl Database {
     // === MCP Configs ===
 
     pub fn create_mcp_config(&self, req: &CreateMcpConfigRequest) -> SqlResult<McpConfig> {
-        let conn = self.conn();
         let id = Uuid::new_v4().to_string();
+        let conn = self.conn();
         conn.execute(
             "INSERT INTO mcp_configs (id, name, transport, url, command, args, env_vars) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
             params![id, req.name, req.transport, req.url, req.command, req.args, req.env_vars],
         )?;
+        drop(conn);
         self.get_mcp_config(&id)
     }
 
@@ -543,12 +547,13 @@ impl Database {
     // === Git Configs ===
 
     pub fn create_git_config(&self, req: &CreateGitConfigRequest) -> SqlResult<GitConfig> {
-        let conn = self.conn();
         let id = Uuid::new_v4().to_string();
+        let conn = self.conn();
         conn.execute(
             "INSERT INTO git_configs (id, name, repo_url, default_branch, credentials_secret_id) VALUES (?1, ?2, ?3, ?4, ?5)",
             params![id, req.name, req.repo_url, req.default_branch.as_deref().unwrap_or("main"), req.credentials_secret_id],
         )?;
+        drop(conn);
         self.get_git_config(&id)
     }
 
@@ -592,17 +597,18 @@ impl Database {
 
     /// Retry a failed task — reset to pending and increment retry_count
     pub fn retry_task(&self, id: &str) -> SqlResult<Task> {
-        let conn = self.conn();
         let task = self.get_task(id)?;
         if task.status != "failed" {
             return Err(rusqlite::Error::QueryReturnedNoRows);
         }
+        let conn = self.conn();
         conn.execute(
             "UPDATE tasks SET status = 'pending', assigned_agent_id = NULL, result = NULL, error = NULL, \
              started_at = NULL, completed_at = NULL, retry_count = retry_count + 1, \
              updated_at = datetime('now') WHERE id = ?1",
             params![id],
         )?;
+        drop(conn);
         self.get_task(id)
     }
 
@@ -647,12 +653,13 @@ impl Database {
     // === Projects ===
 
     pub fn create_project(&self, req: &CreateProjectRequest) -> SqlResult<Project> {
-        let conn = self.conn();
         let id = Uuid::new_v4().to_string();
+        let conn = self.conn();
         conn.execute(
             "INSERT INTO projects (id, name, path, description, git_repo, git_branch) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
             params![id, req.name, req.path, req.description, req.git_repo, req.git_branch.as_deref().unwrap_or("main")],
         )?;
+        drop(conn);
         self.get_project(&id)
     }
 
@@ -697,7 +704,6 @@ impl Database {
     }
 
     pub fn update_project(&self, id: &str, req: &UpdateProjectRequest) -> SqlResult<Project> {
-        let conn = self.conn();
         let project = self.get_project(id)?;
 
         let name = req.name.as_deref().unwrap_or(&project.name);
@@ -706,10 +712,12 @@ impl Database {
         let git_repo = req.git_repo.as_ref().or(project.git_repo.as_ref());
         let git_branch = req.git_branch.as_ref().or(project.git_branch.as_ref());
 
+        let conn = self.conn();
         conn.execute(
             "UPDATE projects SET name = ?1, path = ?2, description = ?3, git_repo = ?4, git_branch = ?5, updated_at = datetime('now') WHERE id = ?6",
             params![name, path, description, git_repo, git_branch, id],
         )?;
+        drop(conn);
 
         self.get_project(id)
     }
