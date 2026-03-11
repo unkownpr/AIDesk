@@ -16,6 +16,25 @@ use tauri::Manager;
 use tauri::menu::{AboutMetadataBuilder, MenuBuilder, SubmenuBuilder};
 use tokio::sync::Mutex;
 
+/// Find the `claude` binary by checking common install locations.
+/// macOS GUI apps don't inherit shell PATH, so we search known paths.
+fn find_claude_binary() -> String {
+    let home = std::env::var("HOME").unwrap_or_default();
+    let candidates = [
+        format!("{}/.local/bin/claude", home),
+        format!("{}/.claude/local/claude", home),
+        "/usr/local/bin/claude".to_string(),
+        "/opt/homebrew/bin/claude".to_string(),
+    ];
+    for path in &candidates {
+        if std::path::Path::new(path).exists() {
+            return path.clone();
+        }
+    }
+    // Fallback to bare name (works if PATH happens to include it)
+    "claude".to_string()
+}
+
 pub struct AppState {
     pub db: Arc<Database>,
     pub orchestrator: Arc<Mutex<Orchestrator>>,
@@ -512,7 +531,9 @@ pub struct ClaudeStatus {
 
 #[tauri::command]
 async fn check_claude_status() -> Result<ClaudeStatus, String> {
-    let mut cmd = tokio::process::Command::new("claude");
+    let claude_bin = find_claude_binary();
+
+    let mut cmd = tokio::process::Command::new(&claude_bin);
     cmd.env_remove("CLAUDECODE");
     cmd.arg("--version");
     let version_result = cmd.output().await;
@@ -534,7 +555,7 @@ async fn check_claude_status() -> Result<ClaudeStatus, String> {
         });
     }
 
-    let mut auth_cmd = tokio::process::Command::new("claude");
+    let mut auth_cmd = tokio::process::Command::new(&claude_bin);
     auth_cmd.env_remove("CLAUDECODE");
     auth_cmd.args(["auth", "status"]);
     let auth_result = auth_cmd.output().await;
